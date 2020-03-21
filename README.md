@@ -1,4 +1,4 @@
-# freebible
+# Frontend da Bíblia Livre
 
 Tradução da Bíblia Livre 
 
