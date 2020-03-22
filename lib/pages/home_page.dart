@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
+
 import 'package:freebible/pages/alpha_order.dart';
 import 'package:freebible/pages/drawer_menu.dart';
 import 'package:freebible/pages/new_testament.dart';
 import 'package:freebible/pages/old_testament.dart';
 import 'package:freebible/utils/nav.dart';
-
-Color primary = Color(0xff6785a1);
-Color accent = Color(0xff5b6975);
-Color background = Color(0xffe4edf5);
+import 'package:freebible/utils/constants.dart';
 
 class HomePage extends StatelessWidget {
-  final appTitle = "Bíblia Livre";
 
   @override
   Widget build(BuildContext context) {

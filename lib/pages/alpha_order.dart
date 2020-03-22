@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:freebible/models/books.dart';
+import 'package:freebible/pages/chapter.dart';
 
 import 'package:freebible/utils/db.dart';
+import 'package:freebible/utils/nav.dart';
 
 class AlphaOrderPage extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class AlphaOrderPage extends StatefulWidget {
 
 class _AlphaOrderPageState extends State<AlphaOrderPage> {
   DBProvider db = DBProvider.provider;
-  List<dynamic> bib;
+  List<dynamic> books;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class _AlphaOrderPageState extends State<AlphaOrderPage> {
   _body() {
     return ListView.builder(
       itemExtent: 45,
-      itemCount: (bib != null) ? bib.length : 0,
+      itemCount: (books != null) ? books.length : 0,
       itemBuilder: (context, index) {
         return _itemView(index);
       },
@@ -34,7 +36,7 @@ class _AlphaOrderPageState extends State<AlphaOrderPage> {
   }
 
   _itemView(index) {
-    Books book = bib[index];
+    Books book = books[index];
 
     return ListTile(
       title: Text(
@@ -42,7 +44,7 @@ class _AlphaOrderPageState extends State<AlphaOrderPage> {
         style: TextStyle(fontSize: 20),
       ),
       onTap: () {
-        print(book.book);
+        push(context, ChapterPage());
       },
     );
   }
@@ -51,7 +53,7 @@ class _AlphaOrderPageState extends State<AlphaOrderPage> {
     var temp = await _consultar();
 
     setState(() {
-      bib = temp;
+      books = temp;
     });
   }
 
