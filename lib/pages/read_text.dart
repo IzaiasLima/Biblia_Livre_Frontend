@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:freebible/models/bible.dart';
+import 'package:freebible/models/book.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/db.dart';
 
 class ReadTextPage extends StatelessWidget {
-  int book;
+  Book book;
   int chapter;
+  int bookID;
 
   ReadTextPage(this.book, this.chapter);
 
   @override
   Widget build(BuildContext context) {
+    bookID = book.bookID;
     return Scaffold(
       appBar: AppBar(
-        title: Text(appTitle),
+        title: Text("${book.bookName}, ${chapter}"),
       ),
       body: _body(),
     );
@@ -21,7 +24,7 @@ class ReadTextPage extends StatelessWidget {
 
   _body() {
     return new FutureBuilder(
-        future: _getChapter(book, chapter),
+        future: _getChapter(bookID, chapter),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           List<Bible> verses = snapshot.data;

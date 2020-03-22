@@ -18,7 +18,7 @@ class ChapterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appTitle),
+        title: Text(book.bookName),
       ),
       body: _body(),
     );
@@ -49,7 +49,7 @@ class ChapterPage extends StatelessWidget {
         ),
       ),
       onTap: () {
-        push(context, ReadTextPage(book.bookID, chapter));
+        push(context, ReadTextPage(book, chapter));
       },
     );
   }

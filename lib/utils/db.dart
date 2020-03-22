@@ -8,8 +8,13 @@ import 'package:sqflite/sqflite.dart';
 class DBProvider {
   static final dbName = "database.db";
   static final dbVersion = 1;
+
   static final bibleTable = 'Bible';
   static final bookTable = 'BooksList';
+
+  static final oldTestament = 1;
+  static final newTestament = 2;
+
   static final bookID = 'Book';
   static final bookName = 'BookName';
   static final chaptersNumber = 'Chapters';
@@ -53,7 +58,7 @@ class DBProvider {
 
       ByteData data = await rootBundle.load(join("assets", dbName));
       List<int> bytes =
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
       await File(path).writeAsBytes(bytes, flush: true);
     }
@@ -69,22 +74,45 @@ class DBProvider {
 
     try {
       await Directory(dirname(path)).create(recursive: true);
-    } catch (_) {}
+    } catch (error) {
+      print(error);
+    }
 
     ByteData data = await rootBundle.load(join("assets", dbName));
     List<int> bytes =
-    data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await new File(path).writeAsBytes(bytes, flush: true);
 
     this.dbPath = path;
   }
 
-  // Helpers
+  // --- Helpers ---
 
   allBooksList() async {
     Database db = await provider.db;
     var result = await db.query(bookTable, orderBy: bookSeq);
-    List list = result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
+    List list =
+        result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
+    return list;
+  }
+
+  oldTestamentList() async {
+    Database db = await provider.db;
+    var result = await db.query(bookTable,
+        where: 'Testament = ?', whereArgs: [oldTestament], orderBy: bookID);
+    List list =
+        result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
+    print ("Old ${list.length};");
+    return list;
+  }
+
+  newTestamentList() async {
+    Database db = await provider.db;
+    var result = await db.query(bookTable,
+        where: 'Testament = ?', whereArgs: [newTestament], orderBy: bookID);
+    List list =
+        result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
+    print ("New ${list.length};");
     return list;
   }
 
@@ -95,9 +123,11 @@ class DBProvider {
 
   allVerses(bookID, chapter) async {
     Database db = await provider.db;
-    var result = await db.query(bibleTable, where: 'Book = ? and Chapter = ?', whereArgs: [bookID, chapter]);
+    var result = await db.query(bibleTable,
+        where: 'Book = ? and Chapter = ?', whereArgs: [bookID, chapter]);
 
-    List list = result.isNotEmpty ? result.map((l) => Bible.fromMap(l)).toList() : [];
+    List list =
+        result.isNotEmpty ? result.map((l) => Bible.fromMap(l)).toList() : [];
     return list;
   }
 
@@ -109,7 +139,8 @@ class DBProvider {
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await provider.db;
     int id = row[bookID];
-    return await db.update(bibleTable, row, where: '$bookID = ?', whereArgs: [id]);
+    return await db
+        .update(bibleTable, row, where: '$bookID = ?', whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {

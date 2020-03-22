@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:freebible/pages/new_testament.dart';
-import 'package:freebible/pages/old_testament.dart';
+import 'package:freebible/pages/about.dart';
+import 'package:freebible/pages/info.dart';
 import 'package:freebible/utils/nav.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -11,31 +11,39 @@ class DrawerMenu extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-                accountName: Text("Izaias Lima"),
-                accountEmail: Text("biblialivre@izaias.dev"),
-                ),
+              accountName: Text("Izaias Lima"),
+              accountEmail: Text("biblia@izaias.dev"),
+            ),
             ListTile(
               leading: Icon(Icons.bookmark_border),
               trailing: Icon(Icons.arrow_forward_ios),
-              title: Text("Page 1"),
+              title: Text("A versão Bíblia Livre"),
               subtitle: Text("Mais informações"),
-              onTap: () {},
+              onTap: () {
+                _onInfoClick(context);
+              },
             ),
             ListTile(
-              leading: Icon(Icons.pets),
+              leading: Icon(Icons.help_outline),
               trailing: Icon(Icons.arrow_forward_ios),
-              title: Text("ListView"),
-              subtitle: Text("Mais informações"),
-              onTap: () {},
-            )
+              title: Text("Sobre"),
+              onTap: () {
+                _onAboutClick(context);
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  _onDrawerClick(context, Widget page) {
+  _onInfoClick(context) {
     Navigator.pop(context);
-    push(context, page);
+    push(context, InfoPage());
+  }
+
+  _onAboutClick(context) {
+    Navigator.pop(context);
+    push(context, AboutPage());
   }
 }

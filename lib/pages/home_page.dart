@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'package:freebible/pages/alpha_order.dart';
+import 'package:freebible/pages/books.dart';
 import 'package:freebible/pages/drawer_menu.dart';
-import 'package:freebible/pages/new_testament.dart';
-import 'package:freebible/pages/old_testament.dart';
 import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
+
+enum ViewOptions {
+  oldTestament, newTestament, allBooks
+}
+
+final myOptions = ViewOptions.allBooks;
 
 class HomePage extends StatelessWidget {
 
@@ -86,8 +90,7 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             FlatButton(
               onPressed: () {
-                print("OLD");
-                push(context, OldTestamentPage());
+                push(context, BooksPage(ViewOptions.oldTestament));
               },
               child: Icon(
                 Icons.library_books,
@@ -97,8 +100,7 @@ class HomePage extends StatelessWidget {
             ),
             FlatButton(
               onPressed: () {
-                print("NEW");
-                push(context, NewTestamentPage());
+                push(context, BooksPage(ViewOptions.newTestament));
               },
               child: Icon(
                 Icons.wb_sunny,
@@ -108,8 +110,7 @@ class HomePage extends StatelessWidget {
             ),
             FlatButton(
               onPressed: () {
-                print("ALFA");
-                push(context, AlphaOrderPage());
+                push(context, BooksPage(ViewOptions.allBooks));
               },
               child: Icon(
                 Icons.sort_by_alpha,
