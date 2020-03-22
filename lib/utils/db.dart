@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:freebible/models/bible.dart';
+import 'package:freebible/models/book.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBProvider {
   static final dbName = "database.db";
   static final dbVersion = 1;
-  static final table = 'BooksList';
+  static final bibleTable = 'Bible';
+  static final bookTable = 'BooksList';
   static final bookID = 'Book';
   static final bookName = 'BookName';
   static final chaptersNumber = 'Chapters';
@@ -77,30 +80,40 @@ class DBProvider {
   }
 
   // Helpers
+
+  allBooksList() async {
+    Database db = await provider.db;
+    var result = await db.query(bookTable, orderBy: bookSeq);
+    List list = result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
+    return list;
+  }
+
+  oneBook(bookID) async {
+    Database db = await provider.db;
+    return await db.query(bookTable, where: 'Book = ?', whereArgs: [bookID]);
+  }
+
+  allVerses(bookID, chapter) async {
+    Database db = await provider.db;
+    var result = await db.query(bibleTable, where: 'Book = ? and Chapter = ?', whereArgs: [bookID, chapter]);
+
+    List list = result.isNotEmpty ? result.map((l) => Bible.fromMap(l)).toList() : [];
+    return list;
+  }
+
   Future<int> insert(Map<String, dynamic> row) async {
     Database db = await provider.db;
-    return await db.insert(table, row);
-  }
-
-  allRows() async {
-    Database db = await provider.db;
-    return await db.query(table, orderBy: bookSeq);
-  }
-
-  Future<int> rowCount() async {
-    Database db = await provider.db;
-    return Sqflite.firstIntValue(
-        await db.rawQuery('SELECT COUNT(*) FROM $table'));
+    return await db.insert(bibleTable, row);
   }
 
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await provider.db;
     int id = row[bookID];
-    return await db.update(table, row, where: '$bookID = ?', whereArgs: [id]);
+    return await db.update(bibleTable, row, where: '$bookID = ?', whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {
     Database db = await provider.db;
-    return await db.delete(table, where: '$bookID = ?', whereArgs: [id]);
+    return await db.delete(bibleTable, where: '$bookID = ?', whereArgs: [id]);
   }
 }

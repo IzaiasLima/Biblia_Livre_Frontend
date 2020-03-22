@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
         child: Text(
           bannerMsg,
           style: TextStyle(
-              color: accent, fontSize: 20, fontStyle: FontStyle.italic),
+              color: accent, fontSize: fontSize, fontStyle: FontStyle.italic),
         ),
         decoration: BoxDecoration(
           color: background,

@@ -1,27 +1,27 @@
 import 'dart:convert';
 
-Books booksFromJson(String str) => Books.fromMap(json.decode(str));
+Book booksFromJson(String str) => Book.fromMap(json.decode(str));
 
-String booksToJson(Books data) => json.encode(data.toMap());
+String booksToJson(Book data) => json.encode(data.toMap());
 
-class Books {
+class Book {
   int testament;
-  int book;
+  int bookID;
   String bookName;
   int chapters;
   int seq;
 
-  Books({
+  Book({
     this.testament,
-    this.book,
+    this.bookID,
     this.bookName,
     this.chapters,
     this.seq,
   });
 
-  factory Books.fromMap(Map<String, dynamic> json) => Books(
+  factory Book.fromMap(Map<String, dynamic> json) => Book(
     testament: json["Testament"],
-    book: json["Book"],
+    bookID: json["Book"],
     bookName: json["BookName"],
     chapters: json["Chapters"],
     seq: json["Seq"],
@@ -29,9 +29,16 @@ class Books {
 
   Map<String, dynamic> toMap() => {
     "Testament": testament,
-    "Book": book,
+    "Book": bookID,
     "BookName": bookName,
     "Chapters": chapters,
     "Seq": seq,
   };
+
+  @override
+  String toString() {
+    return 'Book{book: $bookID, bookName: $bookName, chapters: $chapters}';
+  }
+
+
 }

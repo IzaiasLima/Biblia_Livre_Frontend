@@ -22,7 +22,7 @@ class OldTestamentPage extends StatelessWidget {
         color: background,
         child: Text(
           "Antigo Testamento",
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: fontSize),
         ),
       ),
     );

@@ -5,33 +5,33 @@ Bible bibleFromJson(String str) => Bible.fromMap(json.decode(str));
 String bibleToJson(Bible data) => json.encode(data.toMap());
 
 class Bible {
-  int book;
+  int bookID;
   int chapter;
-  int verse;
-  String scripture;
+  int verseID;
+  String verseTxt;
   int testament;
 
   Bible({
-    this.book,
+    this.bookID,
     this.chapter,
-    this.verse,
-    this.scripture,
+    this.verseID,
+    this.verseTxt,
     this.testament,
   });
 
   factory Bible.fromMap(Map<String, dynamic> json) => Bible(
-    book: json["Book"],
+    bookID: json["Book"],
     chapter: json["Chapter"],
-    verse: json["Verse"],
-    scripture: json["Scripture"],
+    verseID: json["Verse"],
+    verseTxt: json["Scripture"],
     testament: json["Testament"],
   );
 
   Map<String, dynamic> toMap() => {
-    "Book": book,
+    "Book": bookID,
     "Chapter": chapter,
-    "Verse": verse,
-    "Scripture": scripture,
+    "Verse": verseID,
+    "Scripture": verseTxt,
     "Testament": testament,
   };
 }

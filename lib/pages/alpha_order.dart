@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:freebible/models/books.dart';
+import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter.dart';
+
 
 import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
+import 'package:freebible/utils/constants.dart';
 
 class AlphaOrderPage extends StatefulWidget {
   @override
@@ -12,7 +14,7 @@ class AlphaOrderPage extends StatefulWidget {
 
 class _AlphaOrderPageState extends State<AlphaOrderPage> {
   DBProvider db = DBProvider.provider;
-  List<dynamic> books;
+  List<dynamic> books = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +38,16 @@ class _AlphaOrderPageState extends State<AlphaOrderPage> {
   }
 
   _itemView(index) {
-    Books book = books[index];
+    Book book = books[index];
 
     return ListTile(
       title: Text(
         book.bookName,
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(fontSize: fontSize),
       ),
       onTap: () {
-        push(context, ChapterPage());
+        print("** $book");
+        push(context, ChapterPage(book));
       },
     );
   }
@@ -59,9 +62,6 @@ class _AlphaOrderPageState extends State<AlphaOrderPage> {
 
   _consultar() async {
     DBProvider instance = DBProvider.provider;
-    var res = await instance.allRows();
-
-    List list = res.isNotEmpty ? res.map((l) => Books.fromMap(l)).toList() : [];
-    return list;
+    return await instance.allBooksList();
   }
 }

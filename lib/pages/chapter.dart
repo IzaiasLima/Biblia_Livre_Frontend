@@ -1,24 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/read_text.dart';
 import 'package:freebible/utils/constants.dart';
 
 import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
 
-class ChapterPage extends StatefulWidget {
-  @override
-  _ChapterPageState createState() => _ChapterPageState();
-}
-
-class _ChapterPageState extends State<ChapterPage> {
+class ChapterPage extends StatelessWidget {
   DBProvider db = DBProvider.provider;
-  List<int> chapters = [];
+  final Book book;
+  List<int> chaptersList;
+
+  ChapterPage(this.book);
 
   @override
   Widget build(BuildContext context) {
-    _loadList();
     return Scaffold(
       appBar: AppBar(
         title: Text(appTitle),
@@ -28,112 +25,42 @@ class _ChapterPageState extends State<ChapterPage> {
   }
 
   _body() {
+    chaptersList = _getChaptersList(book.chapters);
     return GridView.builder(
-        itemCount: chapters.length,
+        itemCount: book.chapters,
         padding: EdgeInsets.all(16),
         gridDelegate:
             SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
         itemBuilder: (context, index) {
-          return _itemView(index);
+          return _itemView(context, index);
         });
   }
 
-  _itemView(index) {
-    int chapter = chapters[index];
+  _itemView(context, index) {
+    int chapter = chaptersList[index] ?? 0;
 
     return GestureDetector(
       child: Container(
-        //alignment: Alignment.centerLeft,
         padding: EdgeInsets.only(left: 0, right: 16),
         child: Text(
           "$chapter",
-          style: TextStyle(fontSize: 24),
+          style: TextStyle(fontSize: fontSize),
           textAlign: TextAlign.end,
         ),
       ),
-      onTap: (){
-        push(context, ReadTextPage(chapter));
+      onTap: () {
+        push(context, ReadTextPage(book.bookID, chapter));
       },
     );
   }
 
-  _loadList() async {
-    var temp = await _getChapters();
+  _getChaptersList(int c) {
+    List<int> list = [];
 
-    setState(() {
-      chapters = temp;
-    });
-  }
+    for (int i = 0; i < c; i++) {
+      list.add(i+1);
+    }
 
-  _getChapters() async {
-//    DBProvider instance = DBProvider.provider;
-//    var res = await instance.allRows();
-
-    List<int> list = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28,
-      29,
-      30,
-      31,
-      32,
-      33,
-      34,
-      35,
-      26,
-      37,
-      38,
-      39,
-      40,
-      41,
-      42,
-      43,
-      44,
-      45,
-      36,
-      47,
-      48,
-      49,
-      50,
-      51,
-      52,
-      53,
-      54,
-      55,
-      56,
-      57,
-      58,
-      59,
-      60,
-      61,
-      62,
-      63
-    ];
     return list;
   }
 }

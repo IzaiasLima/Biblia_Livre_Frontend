@@ -22,7 +22,7 @@ class NewTestamentPage extends StatelessWidget {
         color: background,
         child: Text(
           "Novo Testamento",
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: fontSize),
         ),
       ),
     );
