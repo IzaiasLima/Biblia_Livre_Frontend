@@ -8,17 +8,27 @@ import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
 
 class ChapterPage extends StatelessWidget {
-  DBProvider db = DBProvider.provider;
-  final Book book;
+  final idxBook;
+  final List<Book> books;
+
+  Book book;
   List<int> chaptersList;
 
-  ChapterPage(this.book);
+  ChapterPage(this.books, this.idxBook);
 
   @override
   Widget build(BuildContext context) {
+    book = books[idxBook];
     return Scaffold(
       appBar: AppBar(
         title: Text(book.bookName),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                goHome(context);
+              })
+        ],
       ),
       body: _body(),
     );
@@ -37,7 +47,8 @@ class ChapterPage extends StatelessWidget {
   }
 
   _itemView(context, index) {
-    int chapter = chaptersList[index] ?? 0;
+    int chapter =
+        ((book == null) || (chaptersList == null)) ? 0 : chaptersList[index];
 
     return GestureDetector(
       child: Container(
@@ -49,7 +60,7 @@ class ChapterPage extends StatelessWidget {
         ),
       ),
       onTap: () {
-        push(context, ReadTextPage(book, chapter));
+        push(context, ReadTextPage(books, chapter, idxBook));
       },
     );
   }
@@ -58,7 +69,7 @@ class ChapterPage extends StatelessWidget {
     List<int> list = [];
 
     for (int i = 0; i < c; i++) {
-      list.add(i+1);
+      list.add(i + 1);
     }
 
     return list;

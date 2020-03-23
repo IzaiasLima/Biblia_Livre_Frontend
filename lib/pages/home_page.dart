@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
                 push(context, BooksPage(ViewOptions.oldTestament));
               },
               child: Icon(
-                Icons.library_books,
+                Icons.cloud_queue,
                 color: background,
                 size: 40,
               ),
@@ -103,7 +103,7 @@ class HomePage extends StatelessWidget {
                 push(context, BooksPage(ViewOptions.newTestament));
               },
               child: Icon(
-                Icons.wb_sunny,
+                Icons.flare,
                 color: background,
                 size: 40,
               ),

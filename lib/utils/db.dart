@@ -102,7 +102,6 @@ class DBProvider {
         where: 'Testament = ?', whereArgs: [oldTestament], orderBy: bookID);
     List list =
         result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
-    print ("Old ${list.length};");
     return list;
   }
 
@@ -112,7 +111,6 @@ class DBProvider {
         where: 'Testament = ?', whereArgs: [newTestament], orderBy: bookID);
     List list =
         result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
-    print ("New ${list.length};");
     return list;
   }
 
@@ -121,7 +119,7 @@ class DBProvider {
     return await db.query(bookTable, where: 'Book = ?', whereArgs: [bookID]);
   }
 
-  allVerses(bookID, chapter) async {
+  Future<List<Bible>> allVerses(bookID, chapter) async {
     Database db = await provider.db;
     var result = await db.query(bibleTable,
         where: 'Book = ? and Chapter = ?', whereArgs: [bookID, chapter]);

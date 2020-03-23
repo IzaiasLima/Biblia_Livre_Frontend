@@ -6,3 +6,7 @@ Future push(BuildContext context, Widget page) {
         return page;
       }));
 }
+
+void goHome(BuildContext context) {
+  Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+}

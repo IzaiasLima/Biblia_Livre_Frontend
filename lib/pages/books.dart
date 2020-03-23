@@ -7,27 +7,14 @@ import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
 
-class BooksPage extends StatefulWidget {
+class BooksPage extends StatelessWidget {
+  // DBProvider db = DBProvider.provider;
   final ViewOptions viewOptions;
 
   BooksPage(this.viewOptions);
 
   @override
-  _BooksPageState createState() => _BooksPageState(viewOptions);
-}
-
-class _BooksPageState extends State<BooksPage> {
-  DBProvider db = DBProvider.provider;
-  List<dynamic> books = [];
-
-  final ViewOptions viewOptions;
-
-  _BooksPageState(this.viewOptions);
-
-  @override
   Widget build(BuildContext context) {
-    _loadBookList();
-
     return Scaffold(
       appBar: AppBar(
         title: _title(),
@@ -42,7 +29,7 @@ class _BooksPageState extends State<BooksPage> {
     switch (viewOptions) {
       case ViewOptions.oldTestament:
         {
-        title = "Velho Testamento";
+          title = "Velho Testamento";
           break;
         }
       case ViewOptions.newTestament:
@@ -55,17 +42,29 @@ class _BooksPageState extends State<BooksPage> {
   }
 
   _body() {
-    return ListView.builder(
-      itemExtent: 45,
-      itemCount: (books != null) ? books.length : 0,
-      itemBuilder: (context, index) {
-        return _itemView(index);
-      },
-    );
+    return FutureBuilder(
+        future: _loadBookList(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Book> books = snapshot.data;
+            return ListView.builder(
+              itemExtent: 45,
+              itemCount: (books != null) ? books.length : 0,
+              itemBuilder: (context, index) {
+                return _itemView(context, books, index);
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
-  _itemView(index) {
+  _itemView(context, books, index) {
     Book book = books[index];
+    int idxBook = index;
 
     return ListTile(
       title: Text(
@@ -73,22 +72,14 @@ class _BooksPageState extends State<BooksPage> {
         style: TextStyle(fontSize: fontSize),
       ),
       onTap: () {
-        push(context, ChapterPage(book));
+        push(context, ChapterPage(books, idxBook));
       },
     );
   }
 
   _loadBookList() async {
-    var temp = await _dbQuery();
-
-    setState(() {
-      books = temp;
-    });
-  }
-
-  _dbQuery() async {
     DBProvider instance = DBProvider.provider;
-    var result;
+    List result;
 
     switch (viewOptions) {
       case ViewOptions.oldTestament:
@@ -96,7 +87,6 @@ class _BooksPageState extends State<BooksPage> {
           result = await instance.oldTestamentList();
           break;
         }
-
       case ViewOptions.newTestament:
         {
           result = await instance.newTestamentList();
@@ -107,6 +97,8 @@ class _BooksPageState extends State<BooksPage> {
           result = await instance.allBooksList();
         }
     }
+
+    print("Lidos >>> ${result.length} livros.");
     return result;
   }
 }
