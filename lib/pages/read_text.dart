@@ -92,6 +92,7 @@ class _ReadTextPageState extends State<ReadTextPage> {
     var verseTxt = bible.verseTxt;
 
     return GestureDetector(
+      onTap: () => Scaffold.of(context).hideCurrentSnackBar(),
       onLongPress: () {
         _onLongPress(context, book.bookName, verseID, verseTxt);
       },
@@ -117,7 +118,8 @@ class _ReadTextPageState extends State<ReadTextPage> {
     var txt = "$verseTxt \n(${book.bookName}, $chapter:$verseID)";
     Scaffold.of(context).showSnackBar(
       SnackBar(
-        duration: Duration(minutes: 2),
+
+        duration: Duration(seconds: 5),
         backgroundColor: accent,
         content: Text(txt),
         action: SnackBarAction(
