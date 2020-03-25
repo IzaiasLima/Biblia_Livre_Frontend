@@ -6,6 +6,7 @@ import 'package:freebible/pages/home_page.dart';
 import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
+import 'package:freebible/widgets/dlg_search.dart';
 
 class BooksPage extends StatelessWidget {
   // DBProvider db = DBProvider.provider;
@@ -17,6 +18,22 @@ class BooksPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          ButtonBar(
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.search,
+                  size: 25,
+                  color: background,
+                ),
+                onPressed: () {
+                  search(context);
+                },
+              ),
+            ],
+          ),
+        ],
         title: _title(),
       ),
       body: _body(),
@@ -36,7 +53,7 @@ class BooksPage extends StatelessWidget {
         title = "Novo Testamento";
         break;
       default:
-        title = "Ordem alfabética";
+        title = "Todos os livros";
     }
     return Text(title);
   }
@@ -97,8 +114,6 @@ class BooksPage extends StatelessWidget {
           result = await instance.allBooksList();
         }
     }
-
-    print("Lidos >>> ${result.length} livros.");
     return result;
   }
 }

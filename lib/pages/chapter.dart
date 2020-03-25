@@ -24,10 +24,25 @@ class ChapterPage extends StatelessWidget {
         title: Text(book.bookName),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                goHome(context);
-              })
+            icon: Icon(
+              Icons.search,
+              size: 25,
+              color: background,
+            ),
+            onPressed: () {
+              print("Pesquisa na tela de capítulos");
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.home,
+              size: 25,
+              color: background,
+            ),
+            onPressed: () {
+              goHome(context);
+            },
+          ),
         ],
       ),
       body: _body(),

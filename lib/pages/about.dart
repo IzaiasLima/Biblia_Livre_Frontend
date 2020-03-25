@@ -36,9 +36,17 @@ class AboutPage extends StatelessWidget {
                 fontSize: size,
               ),
             ),
+          ),Container(
+            padding: EdgeInsets.only(top: spacer),
+            child: Text(
+              "Versão 1.0.1",
+              style: TextStyle(
+                fontSize: size - 2,
+              ),
+            ),
           ),
           Container(
-            padding: EdgeInsets.only(top: spacer),
+            padding: EdgeInsets.only(top: spacer*3),
             child: Text(
               "by Izaias Moreira Lima",
               style: TextStyle(
@@ -48,7 +56,7 @@ class AboutPage extends StatelessWidget {
           ),
           Container(
             child: Text(
-              "biblia@izaias.dev",
+              "e-mail: biblia@izaias.dev",
               style: TextStyle(
                 fontSize: size,
               ),

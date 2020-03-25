@@ -20,6 +20,8 @@ class DBProvider {
   static final chaptersNumber = 'Chapters';
   static final bookSeq = 'Seq';
 
+  static bool alwaysCopy = false;
+
   String dbPath;
 
   DBProvider._(); // singleton
@@ -31,18 +33,17 @@ class DBProvider {
   Future<Database> get db async {
     if (instance != null) return instance;
 
-    await _copyDB(true);
+    await _copyDB(alwaysCopy);
     instance = await openDatabase(dbPath, version: dbVersion);
 
     return instance;
   }
 
-  _copyDB(bool newCopy) async {
-    if (newCopy) {
+  _copyDB(alwaysCopy) async {
+    if (alwaysCopy)
       await _newCopyDB();
-    } else {
+    else
       await _copyIfNotDB();
-    }
   }
 
   _copyIfNotDB() async {

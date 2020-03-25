@@ -11,12 +11,14 @@ class DrawerMenu extends StatelessWidget {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Izaias Lima"),
-              accountEmail: Text("biblia@izaias.dev"),
+              currentAccountPicture: CircleAvatar(
+                  backgroundImage:
+                      AssetImage("assets/images/biblia_livre.png")),
+              accountName: Text("BÍBLIA LIVRE"),
+              accountEmail: Text("by Izaias Lima\ne-mail: biblialivre@izaias.dev"),
             ),
             ListTile(
               leading: Icon(Icons.bookmark_border),
-              trailing: Icon(Icons.arrow_forward_ios),
               title: Text("A versão Bíblia Livre"),
               subtitle: Text("Mais informações"),
               onTap: () {
@@ -25,7 +27,6 @@ class DrawerMenu extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.help_outline),
-              trailing: Icon(Icons.arrow_forward_ios),
               title: Text("Sobre"),
               onTap: () {
                 _onAboutClick(context);

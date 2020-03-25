@@ -5,14 +5,11 @@ import 'package:freebible/pages/drawer_menu.dart';
 import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
 
-enum ViewOptions {
-  oldTestament, newTestament, allBooks
-}
+enum ViewOptions { oldTestament, newTestament, allBooks }
 
 final myOptions = ViewOptions.allBooks;
 
 class HomePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return _body(context);
@@ -32,14 +29,11 @@ class HomePage extends StatelessWidget {
   }
 
   _components(context) {
-    return Stack(
-        //fit: StackFit.expand,
-        alignment: Alignment.bottomRight,
-        children: [
-          _header(),
-          _banner(),
-          _buttonBar(context),
-        ]);
+    return Stack(alignment: Alignment.bottomRight, children: [
+      _header(),
+      _banner(),
+      _buttonBar(context),
+    ]);
   }
 
   _header() {
@@ -80,11 +74,14 @@ class HomePage extends StatelessWidget {
   }
 
   _buttonBar(context) {
+    var iconSize = 35.0;
+
     return Container(
       color: background,
-      padding: EdgeInsets.all(6),
+      // padding: EdgeInsets.all(6),
       child: Container(
-        height: 100,
+        padding: EdgeInsets.all(16),
+        height: 90,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -95,7 +92,7 @@ class HomePage extends StatelessWidget {
               child: Icon(
                 Icons.cloud_queue,
                 color: background,
-                size: 40,
+                size: iconSize,
               ),
             ),
             FlatButton(
@@ -105,19 +102,20 @@ class HomePage extends StatelessWidget {
               child: Icon(
                 Icons.flare,
                 color: background,
-                size: 40,
+                size: iconSize,
               ),
             ),
             FlatButton(
+              padding: EdgeInsets.all(0),
               onPressed: () {
                 push(context, BooksPage(ViewOptions.allBooks));
               },
               child: Icon(
                 Icons.sort_by_alpha,
                 color: background,
-                size: 40,
+                size: iconSize,
               ),
-            )
+            ),
           ],
         ),
         decoration: BoxDecoration(

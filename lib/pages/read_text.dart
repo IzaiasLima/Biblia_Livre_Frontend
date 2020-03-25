@@ -57,15 +57,15 @@ class _ReadTextPageState extends State<ReadTextPage> {
     );
   }
 
-
   _body() {
+    List<Bible> verses;
     return GestureDetector(
       onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
       child: FutureBuilder(
         future: _getChapterText(bookID, chapter),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<Bible> verses = snapshot.data;
+            verses = snapshot.data;
             return _listView(verses);
           } else {
             return Center(
@@ -109,33 +109,12 @@ class _ReadTextPageState extends State<ReadTextPage> {
 
   _getChapterText(bookID, chapter) {
     if (bookID == null) return null;
-
     DBProvider db = DBProvider.provider;
     return db.allVerses(bookID, chapter);
   }
 
-  _onLongPress(context, bookName, verseID, verseTxt) {
-    var txt = "$verseTxt \n(${book.bookName}, $chapter:$verseID)";
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-
-        duration: Duration(seconds: 5),
-        backgroundColor: accent,
-        content: Text(txt),
-        action: SnackBarAction(
-          label: "COPIAR",
-          textColor: Colors.white,
-          onPressed: () {
-            Clipboard.setData(ClipboardData(text: txt));
-          },
-        ),
-      ),
-    );
-  }
-
-  _onHorizontalDrag(DragEndDetails details) {
+  _onHorizontalDrag(details) {
     if (details.primaryVelocity == 0) return;
-
     if (details.primaryVelocity.compareTo(0) == -1) {
       ++chapter;
       if (chapter > book.chapters) {
@@ -153,5 +132,25 @@ class _ReadTextPageState extends State<ReadTextPage> {
     }
 
     setState(() => _body());
+  }
+
+  _onLongPress(context, bookName, verseID, String verseTxt) {
+    var txt = ((verseTxt.length) > 25) ? "${verseTxt.substring(0, 25)}..." : verseTxt;
+    var ref = "${book.bookName}, $chapter:$verseID";
+
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 5),
+        backgroundColor: accent,
+        content: Text("$txt\n$ref"),
+        action: SnackBarAction(
+          label: "COPIAR",
+          textColor: Colors.white,
+          onPressed: () {
+            Clipboard.setData(ClipboardData(text: txt));
+          },
+        ),
+      ),
+    );
   }
 }
