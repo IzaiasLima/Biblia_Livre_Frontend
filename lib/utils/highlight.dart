@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 
-highlight(BuildContext context, String text, String term, double fontSize) {
-  TextStyle textStyle = TextStyle(color: Colors.black, fontSize: fontSize);
-  TextStyle textStyleHighlight =
-      TextStyle(color: Colors.red[700], fontSize: fontSize);
+textTagged(BuildContext context, String text, String term, double fontSize) {
+  if (term.isEmpty) return Text(text, style: TextStyle(color: Colors.black, fontSize: fontSize));
 
-  if (term.isEmpty) return Text(text, style: textStyle);
-
-  List<InlineSpan> children = [];
-  List<String> terms = term.split(" ");
+  List<String> terms = term.trim().split(" ");
 
   terms.forEach((part) {
     String termLC = part.toLowerCase();
 
     List<String> spanList = text.toLowerCase().split(termLC);
     int i = 0;
+    String textTemp = "";
+
     spanList.forEach((v) {
       if (v.isNotEmpty) {
-        children.add(
-            TextSpan(text: text.substring(i, i + v.length), style: textStyle));
+        textTemp += text.substring(i, i + v.length);
         i += v.length;
       }
       if (i < text.length) {
-        children.add(TextSpan(
-            text: text.substring(i, i + part.length),
-            style: textStyleHighlight));
+        textTemp += "<bold>${text.substring(i, i + part.length)}</bold>";
         i += part.length;
       }
     });
+    text = textTemp;
   });
-  return RichText(text: TextSpan(children: children));
+  return text;
 }

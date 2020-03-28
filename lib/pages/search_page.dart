@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'package:styled_text/styled_text.dart';
+
 import 'package:freebible/models/bible.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/db.dart';
@@ -16,7 +18,8 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = new TextEditingController();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
-  List<Bible> listVerses;
+  List<Bible> _listVerses;
+  bool _isCopying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
     return ListView.builder(
       key: _listKey,
       shrinkWrap: true,
-      itemCount: (listVerses != null) ? listVerses.length : 0,
+      itemCount: (_listVerses != null) ? _listVerses.length : 0,
       itemBuilder: (context, index) {
         return _itemView(context, index);
       },
@@ -98,37 +101,70 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _itemView(context, index) {
-    Bible bible = listVerses[index];
+    Bible bible = _listVerses[index];
     String search = _controller.text;
 
     var verse = bible.verseTxt;
     var ref = "${bible.bookName} ${bible.chapter}:${bible.verseID}";
     var verseHighlight = _highlight(context, verse, search);
+    var size = fontSize - 5;
 
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 16, top: 16, right: 6, bottom: 0),
-      title: verseHighlight,
+      contentPadding: EdgeInsets.only(left: 16, right: 12),
+      title: StyledText(
+        text: "<bold>$ref</bold>",
+        styles: {
+          'bold': TextStyle(
+            //color: Colors.blue[700],
+            fontSize: (size),
+            fontWeight: FontWeight.bold,
+          ),
+        },
+      ),
+      subtitle: StyledText(
+        text: "<all>$verseHighlight</all>",
+        styles: {
+          'all': TextStyle(
+            color: Colors.black,
+            fontSize: (size),
+            fontWeight: FontWeight.normal,
+          ),
+          'bold': TextStyle(
+            color: Colors.blue[700],
+            fontSize: (size),
+            fontWeight: FontWeight.bold,
+          ),
+        },
+      ),
       onLongPress: (() {
+        _isCopying = true;
         copyToClipboard(context, ref, verse);
       }),
-      onTap: () => Scaffold.of(context).hideCurrentSnackBar(),
+      onTap: (() {
+        if (_isCopying) {
+          Scaffold.of(context).hideCurrentSnackBar();
+          _isCopying = false;
+        } else {
+          //push(context, ReadTextPage());
+        }
+      }),
     );
   }
 
-  _highlight(context, verse, search){
-    return highlight(context, verse, search, fontSize - 3);
+  _highlight(context, verse, search) {
+    return textTagged(context, verse, search, fontSize - 3);
   }
 
   _getVerses() async {
     String searchText = _controller.text;
     if (searchText.isEmpty || searchText.length < 2) return null;
-    if (listVerses != null) listVerses.clear();
+    if (_listVerses != null) _listVerses.clear();
 
     DBProvider db = DBProvider.provider;
     var res = await db.searchVerses(searchText);
 
     setState(() {
-      listVerses = res;
+      _listVerses = res;
     });
   }
 }

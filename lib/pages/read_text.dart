@@ -7,7 +7,7 @@ import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/nav.dart';
 
 class ReadTextPage extends StatefulWidget {
-  final List<Book> books;
+  List<Book> books;
   Book book;
   int chapter;
   int idxBook;
@@ -57,7 +57,7 @@ class _ReadTextPageState extends State<ReadTextPage> {
   }
 
   _body() {
-    List<Bible> verses;
+    List<dynamic> verses;
     return GestureDetector(
       onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
       child: FutureBuilder(
@@ -114,21 +114,27 @@ class _ReadTextPageState extends State<ReadTextPage> {
 
   _onHorizontalDrag(details) {
     if (details.primaryVelocity == 0) return;
+
     if (details.primaryVelocity.compareTo(0) == -1) {
-      ++chapter;
-      if (chapter > book.chapters) {
-        book = books[++idxBook];
-        bookID = book.bookID;
-        chapter = 1;
+      if (++chapter > book.chapters) {
+        if (idxBook < books.length - 1) {
+          chapter = 1;
+          book = books[++idxBook];
+        } else {
+          chapter = book.chapters;
+        }
       }
     } else {
-      --chapter;
-      if (chapter <= 0) {
-        book = books[--idxBook];
-        bookID = book.bookID;
-        chapter = book.chapters;
+      if (--chapter < 1) {
+        if (idxBook > 0) {
+          book = books[--idxBook];
+          chapter = book.chapters;
+        } else {
+          chapter = 1;
+        }
       }
     }
+    bookID = book.bookID;
     setState(() => _body());
   }
 

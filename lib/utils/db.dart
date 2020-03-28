@@ -118,7 +118,8 @@ class DBProvider {
 
   oneBook(bookID) async {
     Database db = await provider.db;
-    return await db.query(bookTable, where: "Book = ?", whereArgs: [bookID]);
+    var result = await db.query(bookTable, where: "Book = ?", whereArgs: [bookID]);
+    return (result.isNotEmpty) ? result.map((l) => Book.fromMap(l)).toList()[0] : null;
   }
 
   allVerses(bookID, chapter) async {
