@@ -28,10 +28,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # permite construir os icones do App (no terminal, digite : flutter pub run flutter_launcher_icons:main)
   flutter_launcher_icons: any
 
+
+
 flutter_icons:
-  image_path: 'assets/images/biblia_livre.png'
+  image_path: 'assets/images/biblia_livre.png'  # usado pelo app e pelo 'flutter_launcher_icons'
   android: true
   ios: true
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/read_text.dart';
+import 'package:freebible/pages/search_page.dart';
 import 'package:freebible/utils/constants.dart';
 
-import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
 
 class ChapterPage extends StatelessWidget {
@@ -30,7 +30,7 @@ class ChapterPage extends StatelessWidget {
               color: background,
             ),
             onPressed: () {
-              print("Pesquisa na tela de capítulos");
+              push(context, SearchPage());
             },
           ),
           IconButton(

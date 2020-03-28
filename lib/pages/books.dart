@@ -2,33 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter.dart';
 import 'package:freebible/pages/home_page.dart';
+import 'package:freebible/pages/search_page.dart';
 
 import 'package:freebible/utils/db.dart';
 import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
-import 'package:freebible/widgets/dlg_search.dart';
 
-class BooksPage extends StatelessWidget {
+class BooksPage extends StatefulWidget {
   // DBProvider db = DBProvider.provider;
   final ViewOptions viewOptions;
 
   BooksPage(this.viewOptions);
 
   @override
-  Widget build(BuildContext context) {
+  _BooksPageState createState() => _BooksPageState();
+}
+
+class _BooksPageState extends State<BooksPage> {
+  Icon icon = new Icon(Icons.search, color: background);
+
+  @override
+  Widget build(context) {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           ButtonBar(
             children: <Widget>[
               IconButton(
-                icon: Icon(
-                  Icons.search,
-                  size: 25,
-                  color: background,
-                ),
+                icon: icon,
                 onPressed: () {
-                  search(context);
+                  push(context, SearchPage());
                 },
               ),
             ],
@@ -43,7 +46,7 @@ class BooksPage extends StatelessWidget {
   _title() {
     var title;
 
-    switch (viewOptions) {
+    switch (widget.viewOptions) {
       case ViewOptions.oldTestament:
         {
           title = "Velho Testamento";
@@ -95,23 +98,23 @@ class BooksPage extends StatelessWidget {
   }
 
   _loadBookList() async {
-    DBProvider instance = DBProvider.provider;
+    DBProvider db = DBProvider.provider;
     List result;
 
-    switch (viewOptions) {
+    switch (widget.viewOptions) {
       case ViewOptions.oldTestament:
         {
-          result = await instance.oldTestamentList();
+          result = await db.oldTestamentList();
           break;
         }
       case ViewOptions.newTestament:
         {
-          result = await instance.newTestamentList();
+          result = await db.newTestamentList();
           break;
         }
       default:
         {
-          result = await instance.allBooksList();
+          result = await db.allBooksList();
         }
     }
     return result;

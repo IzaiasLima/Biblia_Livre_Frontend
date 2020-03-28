@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:freebible/models/bible.dart';
 import 'package:freebible/models/book.dart';
@@ -28,15 +29,15 @@ class DBProvider {
 
   static final DBProvider provider = DBProvider._();
 
-  static Database instance; // singleton
+  static Database _instance; // singleton
 
   Future<Database> get db async {
-    if (instance != null) return instance;
+    if (_instance != null) return _instance;
 
     await _copyDB(alwaysCopy);
-    instance = await openDatabase(dbPath, version: dbVersion);
+    _instance = await openDatabase(dbPath, version: dbVersion);
 
-    return instance;
+    return _instance;
   }
 
   _copyDB(alwaysCopy) async {
@@ -100,7 +101,7 @@ class DBProvider {
   oldTestamentList() async {
     Database db = await provider.db;
     var result = await db.query(bookTable,
-        where: 'Testament = ?', whereArgs: [oldTestament], orderBy: bookID);
+        where: "Testament = ?", whereArgs: [oldTestament], orderBy: bookID);
     List list =
         result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
     return list;
@@ -109,7 +110,7 @@ class DBProvider {
   newTestamentList() async {
     Database db = await provider.db;
     var result = await db.query(bookTable,
-        where: 'Testament = ?', whereArgs: [newTestament], orderBy: bookID);
+        where: "Testament = ?", whereArgs: [newTestament], orderBy: bookID);
     List list =
         result.isNotEmpty ? result.map((l) => Book.fromMap(l)).toList() : [];
     return list;
@@ -117,16 +118,33 @@ class DBProvider {
 
   oneBook(bookID) async {
     Database db = await provider.db;
-    return await db.query(bookTable, where: 'Book = ?', whereArgs: [bookID]);
+    return await db.query(bookTable, where: "Book = ?", whereArgs: [bookID]);
   }
 
-  Future<List<Bible>> allVerses(bookID, chapter) async {
+  allVerses(bookID, chapter) async {
     Database db = await provider.db;
     var result = await db.query(bibleTable,
-        where: 'Book = ? and Chapter = ?', whereArgs: [bookID, chapter]);
+        where: "Book = ? and Chapter = ?", whereArgs: [bookID, chapter]);
 
     List list =
         result.isNotEmpty ? result.map((l) => Bible.fromMap(l)).toList() : [];
+    return list;
+  }
+
+  searchVerses(String searchText) async {
+    if (searchText == null) return;
+    searchText = searchText.replaceAll(" ", "%");
+
+    Database db = await provider.db;
+    String sql = "SELECT * FROM BooksList as L "
+        "INNER JOIN Bible as B ON (L.Book = B.Book) "
+        "WHERE Scripture LIKE '%?%' "
+        "ORDER BY Book";
+
+    var result = await db.rawQuery(sql.replaceAll("?", searchText));
+
+    List list =
+        result.isNotEmpty ? result.map((l) => Bible.fromMap(l)).toList() : null;
     return list;
   }
 
@@ -139,11 +157,11 @@ class DBProvider {
     Database db = await provider.db;
     int id = row[bookID];
     return await db
-        .update(bibleTable, row, where: '$bookID = ?', whereArgs: [id]);
+        .update(bibleTable, row, where: "$bookID = ?", whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {
     Database db = await provider.db;
-    return await db.delete(bibleTable, where: '$bookID = ?', whereArgs: [id]);
+    return await db.delete(bibleTable, where: "$bookID = ?", whereArgs: [id]);
   }
 }

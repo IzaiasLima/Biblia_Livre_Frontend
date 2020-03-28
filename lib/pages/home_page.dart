@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:freebible/pages/books.dart';
 import 'package:freebible/pages/drawer_menu.dart';
-import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
+import 'package:freebible/utils/nav.dart';
 
 enum ViewOptions { oldTestament, newTestament, allBooks }
 

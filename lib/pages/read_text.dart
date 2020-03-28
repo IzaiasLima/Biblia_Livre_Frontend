@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import 'package:freebible/models/bible.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/db.dart';
+import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/nav.dart';
 
 class ReadTextPage extends StatefulWidget {
@@ -94,7 +93,7 @@ class _ReadTextPageState extends State<ReadTextPage> {
     return GestureDetector(
       onTap: () => Scaffold.of(context).hideCurrentSnackBar(),
       onLongPress: () {
-        _onLongPress(context, book.bookName, verseID, verseTxt);
+        _onLongPress(context, book.bookName, chapter, verseID, verseTxt);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
@@ -130,27 +129,11 @@ class _ReadTextPageState extends State<ReadTextPage> {
         chapter = book.chapters;
       }
     }
-
     setState(() => _body());
   }
 
-  _onLongPress(context, bookName, verseID, String verseTxt) {
-    var txt = ((verseTxt.length) > 25) ? "${verseTxt.substring(0, 25)}..." : verseTxt;
-    var ref = "${book.bookName}, $chapter:$verseID";
-
-    Scaffold.of(context).showSnackBar(
-      SnackBar(
-        duration: Duration(seconds: 5),
-        backgroundColor: accent,
-        content: Text("$txt\n$ref"),
-        action: SnackBarAction(
-          label: "COPIAR",
-          textColor: Colors.white,
-          onPressed: () {
-            Clipboard.setData(ClipboardData(text: txt));
-          },
-        ),
-      ),
-    );
+  _onLongPress(context, bookName, chapter, verseID, String verseTxt) {
+    var ref = "$bookName, $chapter:$verseID";
+    copyToClipboard(context, ref, verseTxt);
   }
 }
