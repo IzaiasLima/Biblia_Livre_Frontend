@@ -15,6 +15,7 @@ Optamos por usar o arquivo da tradução baseada no *Textus Criticus* que, neste
 
 Este aplicativo é um projeto simples, usado como aprendizado na linguagem Dart, com o framework Flutter. Não tem a pretensão de ser exemplo de melhores práticas em desenvolvimento. Utilizamos códigos e idéias de outros desenvolvedores. Se, em algum momento, utilizarmos uma quantidade significativa de código de outras pessoas, daremos os créditos no próprio código.
 
+O leiaute da tela inicial foi inspirado em um artigo de Jelena Lecic publicado [aqui](https://medium.com/@jelenaaa.lecic/complex-layout-in-flutter-example-8c50e81d5aa9).
  
 
 A seguir, algumas fontes de recuros sobre o Flutter:
