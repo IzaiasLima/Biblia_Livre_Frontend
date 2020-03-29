@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-
-textTagged(BuildContext context, String text, String term, double fontSize) {
-  if (term.isEmpty) return Text(text, style: TextStyle(color: Colors.black, fontSize: fontSize));
+String textTagged(String text, String term) {
+  if (term.isEmpty) return text;
 
   List<String> terms = term.trim().split(" ");
 

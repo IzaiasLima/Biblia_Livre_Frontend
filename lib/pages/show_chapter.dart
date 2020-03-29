@@ -1,50 +1,39 @@
 import 'package:flutter/material.dart';
 
 import 'package:freebible/models/bible.dart';
-import 'package:freebible/models/book.dart';
-import 'package:freebible/utils/constants.dart';
 import 'package:freebible/services/db.dart';
+import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/nav.dart';
+import 'package:styled_text/styled_text.dart';
 
-class ReadTextPage extends StatefulWidget {
-  List<Book> books;
-  Book book;
-  int chapter;
-  int idxBook;
-
-  ReadTextPage(this.books, this.chapter, this.idxBook);
-
-  @override
-  _ReadTextPageState createState() =>
-      _ReadTextPageState(books, chapter, idxBook);
-}
-
-class _ReadTextPageState extends State<ReadTextPage> {
-  Book book;
+class ShowChapterPage extends StatefulWidget {
+  String bookName;
+  String verseText;
   int bookID;
   int chapter;
-  int idxBook;
 
-  final List<Book> books;
-  var chapterText;
-
-  _ReadTextPageState(this.books, this.chapter, this.idxBook);
+  ShowChapterPage(this.bookName, this.bookID, this.chapter, this.verseText);
 
   @override
-  void initState() {
-    book = books[idxBook];
-    chapterText = _getChapterText(bookID, chapter);
-    super.initState();
-  }
+  _ShowChapterPageState createState() =>
+      _ShowChapterPageState(bookName, bookID, chapter, verseText);
+}
+
+class _ShowChapterPageState extends State<ShowChapterPage> {
+  String bookName;
+  String verseText;
+  int bookID;
+  int chapter;
+
+  _ShowChapterPageState(
+      this.bookName, this.bookID, this.chapter, this.verseText);
 
   @override
   Widget build(BuildContext context) {
-    bookID = book.bookID;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("${book.bookName}, $chapter"),
+        title: Text("$bookName, $chapter"),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.home),
@@ -60,7 +49,7 @@ class _ReadTextPageState extends State<ReadTextPage> {
   _body() {
     List<dynamic> verses;
     return GestureDetector(
-      onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
+      //onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
       child: FutureBuilder(
         future: _getChapterText(bookID, chapter),
         builder: (context, snapshot) {
@@ -88,18 +77,36 @@ class _ReadTextPageState extends State<ReadTextPage> {
 
   _itemView(context, verses, index) {
     Bible bible = verses[index] ?? 0;
+    String verseText;
+
+    if (bible.verseTxt == this.verseText) {
+      verseText = "<special>${bible.verseID} ${bible.verseTxt}</special>";
+    } else {
+      verseText = "<normal>${bible.verseID} ${bible.verseTxt}</normal>";
+    }
 
     return GestureDetector(
       onTap: () => Scaffold.of(context).hideCurrentSnackBar(),
       onLongPress: () {
-        _onLongPress(context, book.bookName, chapter, bible.verseID, bible.verseTxt);
+        _onLongPress(
+            context, bible.bookName, chapter, bible.verseID, bible.verseTxt);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-        child: Text(
-          "${bible.verseID} ${bible.verseTxt}",
-          style: TextStyle(fontSize: fontSize),
-          textAlign: TextAlign.start,
+        child: StyledText(
+          text: verseText,
+          styles: {
+            'normal': TextStyle(
+              color: Colors.black54,
+              fontSize: fontSize,
+              fontWeight: FontWeight.normal,
+            ),
+            'special': TextStyle(
+              color: Colors.black,
+              fontSize: fontSize,
+              fontWeight: FontWeight.normal,
+            ),
+          },
         ),
       ),
     );
@@ -109,32 +116,6 @@ class _ReadTextPageState extends State<ReadTextPage> {
     if (bookID == null) return null;
     DBProvider db = DBProvider.provider;
     return db.allVerses(bookID, chapter);
-  }
-
-  _onHorizontalDrag(details) {
-    if (details.primaryVelocity == 0) return;
-
-    if (details.primaryVelocity.compareTo(0) == -1) {
-      if (++chapter > book.chapters) {
-        if (idxBook < books.length - 1) {
-          chapter = 1;
-          book = books[++idxBook];
-        } else {
-          chapter = book.chapters;
-        }
-      }
-    } else {
-      if (--chapter < 1) {
-        if (idxBook > 0) {
-          book = books[--idxBook];
-          chapter = book.chapters;
-        } else {
-          chapter = 1;
-        }
-      }
-    }
-    bookID = book.bookID;
-    setState(() => _body());
   }
 
   _onLongPress(context, bookName, chapter, verseID, String verseTxt) {

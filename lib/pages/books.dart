@@ -4,7 +4,7 @@ import 'package:freebible/pages/chapter.dart';
 import 'package:freebible/pages/home_page.dart';
 import 'package:freebible/pages/search_page.dart';
 
-import 'package:freebible/utils/db.dart';
+import 'package:freebible/services/db.dart';
 import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/constants.dart';
 

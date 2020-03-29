@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:freebible/pages/show_chapter.dart';
+import 'package:freebible/utils/nav.dart';
 
 import 'package:styled_text/styled_text.dart';
 
 import 'package:freebible/models/bible.dart';
 import 'package:freebible/utils/constants.dart';
-import 'package:freebible/utils/db.dart';
+import 'package:freebible/services/db.dart';
 import 'package:freebible/utils/dialogs.dart';
-import 'package:freebible/utils/highlight.dart';
+import 'package:freebible/utils/tagged_text.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -106,8 +108,8 @@ class _SearchPageState extends State<SearchPage> {
 
     var verse = bible.verseTxt;
     var ref = "${bible.bookName} ${bible.chapter}:${bible.verseID}";
-    var verseHighlight = _highlight(context, verse, search);
-    var size = fontSize - 5;
+    var verseTagged = textTagged(verse, search);
+    var size = fontSize - 2;
 
     return ListTile(
       contentPadding: EdgeInsets.only(left: 16, right: 12),
@@ -115,23 +117,23 @@ class _SearchPageState extends State<SearchPage> {
         text: "<bold>$ref</bold>",
         styles: {
           'bold': TextStyle(
-            //color: Colors.blue[700],
-            fontSize: (size),
+            color: Colors.black,
+            fontSize: size,
             fontWeight: FontWeight.bold,
           ),
         },
       ),
       subtitle: StyledText(
-        text: "<all>$verseHighlight</all>",
+        text: "<normal>$verseTagged</normal>",
         styles: {
-          'all': TextStyle(
+          'normal': TextStyle(
             color: Colors.black,
-            fontSize: (size),
+            fontSize: size,
             fontWeight: FontWeight.normal,
           ),
           'bold': TextStyle(
             color: Colors.blue[700],
-            fontSize: (size),
+            fontSize: size,
             fontWeight: FontWeight.bold,
           ),
         },
@@ -145,14 +147,13 @@ class _SearchPageState extends State<SearchPage> {
           Scaffold.of(context).hideCurrentSnackBar();
           _isCopying = false;
         } else {
-          //push(context, ReadTextPage());
+          push(
+              context,
+              ShowChapterPage(
+                  bible.bookName, bible.bookID, bible.chapter, bible.verseTxt));
         }
       }),
     );
-  }
-
-  _highlight(context, verse, search) {
-    return textTagged(context, verse, search, fontSize - 3);
   }
 
   _getVerses() async {
