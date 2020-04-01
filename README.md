@@ -7,8 +7,11 @@ Este projeto visa fornecer um aplicativo para celulares (inicialmente para Andro
 
 Não somos os resposáveis pelo projeto de tradução da Bíblia Livre, aqui mencionado. Apenas desenvolvemos este frontend para essa versão da Palavra de Deus. Neste aplicativo estamos usando o arquivo fornecido pelo projeto de tradução no formato *mybible* para o aplicativo MySword para celulares. A versão do arquivo usada neste projeto pode estar desatualizada em relação à última versão disponibilizada pelo projeto de tradução.
 
+Na versão 1.04 foi adicionada a opção de pesquisa por palavras, facilitando a busca de versículos. 
 
-Optamos por usar a tradução baseada no *Textus Criticus* que, neste aplicativo, está na versão 1.0, de 24.02.2018.
+Mantivemos a versão baseada no 'Texto Crítico' (revisão 2018.2.0, liberado em 25.02.2018) porém sem exibir as variantes, e com alguns acréscimos vindos do 'Texto Recebido', com vistas a proporcionar maior fluidez na leitura.
+
+As variantes ainda serão exibidas na pesquisa por palavra, visando facilitar a busca, aumentando as chances do versículo ser localizado, visto que o termo informado pelo leitor pode ser justamente uma dessas variantes. 
 
 
 ## Sobre este aplicativo
