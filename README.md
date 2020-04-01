@@ -17,7 +17,13 @@ As variantes ainda serão exibidas na pesquisa por palavra, visando facilitar a 
 ## Sobre este aplicativo
 
 Este aplicativo é um projeto simples, usado como aprendizado na linguagem Dart, com o framework Flutter. Não tem a pretensão de ser exemplo de melhores práticas em desenvolvimento. O leiaute da tela inicial foi inspirado em um artigo de Jelena Lecic publicado [aqui](https://medium.com/@jelenaaa.lecic/complex-layout-in-flutter-example-8c50e81d5aa9).
- 
+
+### Download
+
+No momento, somente a versão para Android está disponível, podendo se baixada diretamente da Play Store.
+- [Biblia Livre - Play Store](https://play.google.com/store/apps/details?id=dev.izaias.freebible).
+
+### Para saber mais sobre o Flutter
 
 A seguir, algumas fontes de recuros sobre o Flutter:
 
