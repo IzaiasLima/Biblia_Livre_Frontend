@@ -29,7 +29,11 @@ class InfoPage extends StatelessWidget {
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.only(top: spacer),
           child: Text(
-            "Este aplicativo usa a versão 'Texto Crítico' do projeto de tradução de uma versão livre da bíblia para Portguês do Brasil denominado Bíblia Livre (BLIVRE), revisão outubro de 2017.",
+            "Este aplicativo usa a versão do 'Texto Crítico', sem as variantes, "
+            "e com alguns acréscimos vindos do 'Texto Recebido'. O texto base "
+            "usado neste aplicativo foi obtido do projeto de tradução de uma "
+            "versão livre da bíblia para o Portguês do Brasil denominado "
+            "Bíblia Livre (BLIVRE), revisão 2018.2.0, liberado em 25.02.2018.",
             style: TextStyle(
               fontSize: (fontSize - 6),
             ),

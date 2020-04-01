@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import 'package:freebible/utils/constants.dart';
 import 'package:freebible/pages/show_chapter.dart';
 import 'package:freebible/utils/nav.dart';
-
 import 'package:styled_text/styled_text.dart';
-
 import 'package:freebible/models/bible.dart';
-import 'package:freebible/utils/constants.dart';
 import 'package:freebible/services/db.dart';
 import 'package:freebible/utils/dialogs.dart';
-import 'package:freebible/utils/tagged_text.dart';
+import 'package:freebible/utils/text_utils.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -146,11 +145,13 @@ class _SearchPageState extends State<SearchPage> {
         if (_isCopying) {
           Scaffold.of(context).hideCurrentSnackBar();
           _isCopying = false;
-        } else {
-          push(
-              context,
-              ShowChapterPage(
-                  bible.bookName, bible.bookID, bible.chapter, bible.verseTxt));
+        } else { push(context, ShowChapterPage(
+              bible.bookName,
+              bible.bookID,
+              bible.chapter,
+              bible.verseTxt,
+            ),
+          );
         }
       }),
     );

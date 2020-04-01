@@ -5,7 +5,7 @@ import 'package:freebible/services/db.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/nav.dart';
-import 'package:styled_text/styled_text.dart';
+import 'package:freebible/utils/text_utils.dart';
 
 class ShowChapterPage extends StatefulWidget {
   String bookName;
@@ -20,7 +20,8 @@ class ShowChapterPage extends StatefulWidget {
       _ShowChapterPageState(bookName, bookID, chapter, verseText);
 }
 
-class _ShowChapterPageState extends State<ShowChapterPage> {
+class _ShowChapterPageState extends State<ShowChapterPage>
+    with AutomaticKeepAliveClientMixin {
   String bookName;
   String verseText;
   int bookID;
@@ -29,8 +30,16 @@ class _ShowChapterPageState extends State<ShowChapterPage> {
   _ShowChapterPageState(
       this.bookName, this.bookID, this.chapter, this.verseText);
 
+  get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("$bookName, $chapter"),
@@ -48,26 +57,21 @@ class _ShowChapterPageState extends State<ShowChapterPage> {
 
   _body() {
     List<dynamic> verses;
-    return GestureDetector(
-      //onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
-      child: FutureBuilder(
+    return FutureBuilder(
         future: _getChapterText(bookID, chapter),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            verses = snapshot.data;
-            return _listView(verses);
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
+
+          verses = snapshot.data;
+          return _listView(verses);
+        });
   }
 
   _listView(verses) {
     return ListView.builder(
+      controller: ScrollController(),
+      addAutomaticKeepAlives: true,
       itemCount: verses.length,
       itemBuilder: (context, index) {
         return _itemView(context, verses, index);
@@ -77,38 +81,24 @@ class _ShowChapterPageState extends State<ShowChapterPage> {
 
   _itemView(context, verses, index) {
     Bible bible = verses[index] ?? 0;
-    String verseText;
+    String verseTxt = verseWithoutReferences(bible.verseTxt);
 
-    if (bible.verseTxt == this.verseText) {
-      verseText = "<special>${bible.verseID} ${bible.verseTxt}</special>";
-    } else {
-      verseText = "<normal>${bible.verseID} ${bible.verseTxt}</normal>";
-    }
+    Color colorText =
+        (bible.verseTxt == this.verseText) ? Colors.black : Colors.black54;
 
     return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+        child: Text(
+          "${bible.verseID} $verseTxt",
+          style: TextStyle(color: colorText, fontSize: fontSize),
+        ),
+      ),
       onTap: () => Scaffold.of(context).hideCurrentSnackBar(),
       onLongPress: () {
         _onLongPress(
             context, bible.bookName, chapter, bible.verseID, bible.verseTxt);
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-        child: StyledText(
-          text: verseText,
-          styles: {
-            'normal': TextStyle(
-              color: Colors.black54,
-              fontSize: fontSize,
-              fontWeight: FontWeight.normal,
-            ),
-            'special': TextStyle(
-              color: Colors.black,
-              fontSize: fontSize,
-              fontWeight: FontWeight.normal,
-            ),
-          },
-        ),
-      ),
     );
   }
 

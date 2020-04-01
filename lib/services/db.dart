@@ -21,7 +21,7 @@ class DBProvider {
   static final chaptersNumber = 'Chapters';
   static final bookSeq = 'Seq';
 
-  static bool alwaysCopy = false;
+  static bool alwaysCopy = true;
 
   String dbPath;
 

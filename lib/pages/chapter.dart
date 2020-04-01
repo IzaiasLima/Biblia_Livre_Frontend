@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:freebible/models/book.dart';
-import 'package:freebible/pages/read_text.dart';
+import 'package:freebible/pages/read_chapter.dart';
 import 'package:freebible/pages/search_page.dart';
 import 'package:freebible/utils/constants.dart';
 
@@ -75,7 +75,7 @@ class ChapterPage extends StatelessWidget {
         ),
       ),
       onTap: () {
-        push(context, ReadTextPage(books, chapter, idxBook));
+        push(context, ReadChapterPage(books, chapter, idxBook));
       },
     );
   }
