@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:freebible/models/entity.dart';
+
 Bible bibleFromJson(String str) => Bible.fromMap(json.decode(str));
 
 String bibleToJson(Bible data) => json.encode(data.toMap());
 
-class Bible {
+class Bible extends Entity {
   int testament;
   int bookID;
   int chapter;
@@ -31,6 +33,7 @@ class Bible {
         bookName: json["BookName"],
       );
 
+  @override
   Map<String, dynamic> toMap() => {
         "Testament": testament,
         "Book": bookID,

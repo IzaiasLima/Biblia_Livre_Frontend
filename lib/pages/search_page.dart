@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-import 'package:freebible/utils/constants.dart';
-import 'package:freebible/pages/show_chapter.dart';
-import 'package:freebible/utils/nav.dart';
-import 'package:styled_text/styled_text.dart';
 import 'package:freebible/models/bible.dart';
-import 'package:freebible/services/db.dart';
+import 'package:freebible/models/book.dart';
+import 'package:freebible/pages/chapter_page.dart';
+import 'package:freebible/services/bible_bloc.dart';
+import 'package:freebible/services/books_bloc.dart';
+import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
+import 'package:freebible/utils/nav.dart';
 import 'package:freebible/utils/text_utils.dart';
+import 'package:styled_text/styled_text.dart';
 
 class SearchPage extends StatefulWidget {
+  final Testament testament;
+
+  SearchPage([this.testament]);
+
   @override
   _SearchPageState createState() => new _SearchPageState();
 }
@@ -19,17 +24,20 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = new TextEditingController();
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
 
-  List<Bible> _listVerses;
+  BibleBloc _bloc = BibleBloc();
+  BooksBloc _booksBloc = BooksBloc();
   bool _isCopying = false;
+  bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
+    String title = "Pesquisa no ${widget.testament}";
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
         elevation: 1,
         backgroundColor: accent,
-        title: Text("Pesquisa"),
+        title: Text(title),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.close, color: inverse),
@@ -37,19 +45,23 @@ class _SearchPageState extends State<SearchPage> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: _inputSearch(),
-          ),
-          Flexible(
-            flex: 4,
-            fit: FlexFit.tight,
-            child: _showVerses(),
-          )
-        ],
-      ), // _body(),
+      body: _body(),
+    );
+  }
+
+  _body() {
+    return Column(
+      children: <Widget>[
+        Flexible(
+          flex: 1,
+          child: _inputSearch(),
+        ),
+        Flexible(
+          flex: 4,
+          fit: FlexFit.tight,
+          child: _showVerses(),
+        )
+      ],
     );
   }
 
@@ -68,7 +80,10 @@ class _SearchPageState extends State<SearchPage> {
               decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
-                      color: primary, width: 2, style: BorderStyle.solid),
+                    color: primary,
+                    width: 2,
+                    style: BorderStyle.solid,
+                  ),
                 ),
               ),
             ),
@@ -81,9 +96,8 @@ class _SearchPageState extends State<SearchPage> {
             size: 26,
           ),
           onPressed: () {
-            setState(() {
-              _getVerses();
-            });
+            _isSearching = true;
+            _bloc.versesByWord(_controller.text);
           },
         )
       ],
@@ -91,18 +105,44 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _showVerses() {
-    return ListView.builder(
-      key: _listKey,
-      shrinkWrap: true,
-      itemCount: (_listVerses != null) ? _listVerses.length : 0,
-      itemBuilder: (context, index) {
-        return _itemView(context, index);
-      },
+    List<Bible> verses;
+    return StreamBuilder(
+        stream: _bloc.stream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError)
+            return centerText("Erro lendo a lista de versículos.");
+
+          if (!snapshot.hasData && _isSearching)
+            return Center(child: CircularProgressIndicator());
+
+          verses = snapshot.data;
+
+          if (verses == null)
+            return centerText(
+              "Informe a palavra a ser pesquisada.",
+              color: Colors.black,
+            );
+
+          if (verses.length == 0) return centerText("Palavra não encontrada!");
+
+          return _listView(verses);
+        });
+  }
+
+  _listView(verses) {
+    return Scrollbar(
+      child: ListView.builder(
+        key: _listKey,
+        itemCount: verses.length,
+        itemBuilder: (context, index) {
+          return _itemView(context, verses, index);
+        },
+      ),
     );
   }
 
-  _itemView(context, index) {
-    Bible bible = _listVerses[index];
+  _itemView(context, verses, index) {
+    Bible bible = verses[index];
     String search = _controller.text;
 
     var verse = bible.verseTxt;
@@ -145,28 +185,28 @@ class _SearchPageState extends State<SearchPage> {
         if (_isCopying) {
           Scaffold.of(context).hideCurrentSnackBar();
           _isCopying = false;
-        } else { push(context, ShowChapterPage(
-              bible.bookName,
-              bible.bookID,
-              bible.chapter,
-              bible.verseTxt,
-            ),
-          );
+        } else {
+          _showChapter(bible.bookID, bible.chapter, bible.verseTxt);
         }
       }),
     );
   }
 
-  _getVerses() async {
-    String searchText = _controller.text;
-    if (searchText.isEmpty || searchText.length < 2) return null;
-    if (_listVerses != null) _listVerses.clear();
+  _showChapter(bookID, chapter, verseTxt) async {
+    try {
+      List<Book> books = await _booksBloc.book(bookID);
+      push(
+        context,
+        ChapterPage(chapter, 0, books, verseTxt),
+      );
+    } catch (e) {
+      return centerText("Erro ao exibir o capítulo.");
+    }
+  }
 
-    DBProvider db = DBProvider.provider;
-    var res = await db.searchVerses(searchText);
-
-    setState(() {
-      _listVerses = res;
-    });
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 }

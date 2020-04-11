@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:freebible/pages/about.dart';
-import 'package:freebible/pages/info.dart';
+import 'package:freebible/pages/about_page.dart';
+import 'package:freebible/pages/info_page.dart';
 import 'package:freebible/utils/nav.dart';
 
 class DrawerMenu extends StatelessWidget {

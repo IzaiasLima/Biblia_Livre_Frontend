@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:freebible/models/book.dart';
-import 'package:freebible/pages/read_chapter.dart';
+import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/pages/search_page.dart';
 import 'package:freebible/utils/constants.dart';
-
 import 'package:freebible/utils/nav.dart';
 
-class ChapterPage extends StatelessWidget {
+class ChaptersListPage extends StatelessWidget {
   final idxBook;
   final List<Book> books;
 
   Book book;
   List<int> chaptersList;
 
-  ChapterPage(this.books, this.idxBook);
+  ChaptersListPage(this.books, this.idxBook);
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class ChapterPage extends StatelessWidget {
     int chapter =
         ((book == null) || (chaptersList == null)) ? 0 : chaptersList[index];
 
-    return GestureDetector(
+    return InkWell(
       child: Container(
         padding: EdgeInsets.only(left: 0, right: 16),
         child: Text(
@@ -75,18 +74,17 @@ class ChapterPage extends StatelessWidget {
         ),
       ),
       onTap: () {
-        push(context, ReadChapterPage(books, chapter, idxBook));
+        push(context, ChapterPage(chapter, idxBook, books));
       },
     );
   }
 
-  _getChaptersList(int c) {
+  _getChaptersList(int maxChapter) {
     List<int> list = [];
 
-    for (int i = 0; i < c; i++) {
-      list.add(i + 1);
+    for (int chapter = 0; chapter < maxChapter; chapter++) {
+      list.add(chapter + 1);
     }
-
     return list;
   }
 }

@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
 /**
  * Devolve o texto passado como parâmetro, retirand os trechos entre [], ou seja,
  * as observações, referências e traduções alteranativas.
  **/
 
-String verseWithoutReferences(String verse) {
+String cleanVerse(String verse) {
   List<String> listChars = verse.split("");
   List<String> newVerse = [];
   bool isReference = false;
@@ -51,4 +54,17 @@ String textTagged(String text, String term) {
     text = textTemp;
   });
   return text;
+}
+
+centerText(String msg, {color: Colors.redAccent , size: 14.0}) {
+  return Center(
+    child: Text(
+      msg,
+      style: TextStyle(
+        color: color,
+        fontSize: size,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
 }
