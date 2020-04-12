@@ -3,11 +3,11 @@ import 'package:freebible/models/bible_dao.dart';
 import 'package:freebible/services/base_bloc.dart';
 
 class BibleBloc extends BaseBloc<List<Bible>> {
-  BibleDao dao = BibleDao();
+  BibleDao _dao = BibleDao();
 
   Future<List<Bible>> bookVerses(bookID, chapter) async {
     try {
-      List<Bible> verses = await dao.chapterVerses(bookID, chapter);
+      List<Bible> verses = await _dao.chapterVerses(bookID, chapter);
       add(verses);
       return verses;
     } catch (e) {
@@ -18,8 +18,8 @@ class BibleBloc extends BaseBloc<List<Bible>> {
 
   Future<List<Bible>> versesByWord(String searchText) async {
     try {
-      add(null);
-      List<Bible> verses = await dao.versesByWords(searchText);
+      // add(null);
+      List<Bible> verses = await _dao.versesByWords(searchText);
       add(verses);
       return verses;
     } catch (e) {

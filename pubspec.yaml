@@ -54,6 +54,7 @@ flutter:
   assets:
     - assets/database.db
     - assets/images/
+    - assets/sql/
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

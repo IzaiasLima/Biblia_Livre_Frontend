@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
         "Lâmpada para os meus pés é a Tua Palavra e luz para o meu caminho.";
     return Container(
       padding: EdgeInsets.only(left: 20, right: 10, bottom: 50),
-      height: 450,
+      height: 430,
       width: double.infinity,
       child: Center(
         child: Text(

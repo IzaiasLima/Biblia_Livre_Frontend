@@ -2,9 +2,9 @@ import 'package:freebible/models/base_dao.dart';
 import 'package:freebible/models/bible.dart';
 
 class BibleDao extends BaseDAO<Bible> {
-  @override
   String get tableName => "Bible";
-  String get joinTableName => "BooksList";
+
+  String get booksTable => "BooksList";
 
   @override
   Bible fromMap(Map<String, dynamic> map) {
@@ -22,8 +22,8 @@ class BibleDao extends BaseDAO<Bible> {
 
     searchText = searchText.replaceAll(" ", "%");
 
-    String sql = "SELECT * FROM $joinTableName as L "
-        "INNER JOIN $tableName as B ON (L.Book = B.Book) "
+    String sql = "SELECT * FROM $booksTable as L "
+        "INNER JOIN $tableName as B ON (B.Book = L.Book) "
         "WHERE Scripture LIKE '%?%' "
         "ORDER BY Book";
     return await query(sql.replaceAll("?", searchText));

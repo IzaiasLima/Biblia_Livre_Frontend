@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:freebible/models/bible.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
@@ -207,6 +208,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void dispose() {
     _bloc.dispose();
+    _booksBloc.dispose();
     super.dispose();
   }
 }

@@ -29,14 +29,21 @@ class AboutPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Container(
+            child: Image.asset(
+              "assets/images/biblia_livre.png",
+              height: 180,
+            ),
+          ),
+          Container(
             padding: EdgeInsets.only(top: spacer),
             child: Text(
-              "Frontend da versão Bíblia Livre.",
+              "Bíblia Livre",
               style: TextStyle(
-                fontSize: size,
+                fontSize: size * 2,
               ),
             ),
-          ),Container(
+          ),
+          Container(
             padding: EdgeInsets.only(top: spacer),
             child: Text(
               "Versão 1.0.5",
@@ -46,9 +53,9 @@ class AboutPage extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: spacer*3),
+            padding: EdgeInsets.only(top: spacer * 3),
             child: Text(
-              "by Izaias Moreira Lima",
+              "Izaias Moreira Lima",
               style: TextStyle(
                 fontSize: size,
               ),

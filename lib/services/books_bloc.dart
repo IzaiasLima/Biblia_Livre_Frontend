@@ -5,11 +5,11 @@ import 'package:freebible/utils/constants.dart';
 
 class BooksBloc  extends BaseBloc<List<Book>>{
 
-  BooksDao dao = BooksDao();
+  BooksDao _dao = BooksDao();
 
   Future<List<Book>> book(int bookID) async {
     try {
-      List<Book> books = await dao.bookById(bookID);
+      List<Book> books = await _dao.bookById(bookID);
       add(books);
       return books;
     } catch (e) {
@@ -20,7 +20,7 @@ class BooksBloc  extends BaseBloc<List<Book>>{
 
   Future<List<Book>> booksList(Testament testament) async {
     try {
-      List<Book> books = await dao.booksList(testament);
+      List<Book> books = await _dao.booksList(testament);
       add(books);
       return books;
       
