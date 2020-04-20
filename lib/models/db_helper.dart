@@ -54,7 +54,6 @@ class DatabaseHelper {
 
     for (String s in sql) {
       if (s.trim().isNotEmpty) {
-        print("sql: $s");
         await db.execute(s);
       }
     }
@@ -89,8 +88,7 @@ class DatabaseHelper {
 
     try {
       await Directory(dirname(path)).create(recursive: true);
-    } catch (error) {
-      print(error);
+    } catch (_) {
     }
 
     ByteData data = await rootBundle.load(join("assets", dbName));

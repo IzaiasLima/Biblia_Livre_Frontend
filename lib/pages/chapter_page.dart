@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:freebible/models/bible.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/models/book.dart';
-import 'package:freebible/services/bible_bloc.dart';
+import 'package:freebible/models/favorite.dart';
+import 'package:freebible/services/favorites_bloc.dart';
+import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/nav.dart';
@@ -23,7 +25,7 @@ class ChapterPage extends StatefulWidget {
 
 class _ChapterPageState extends State<ChapterPage> {
   Book book;
-  BibleBloc _bloc = BibleBloc();
+  VerseBloc _bloc = VerseBloc();
 
   _ChapterPageState();
 
@@ -32,6 +34,15 @@ class _ChapterPageState extends State<ChapterPage> {
     super.initState();
     book = widget.books[widget.idxBook];
     _bloc.bookVerses(book.bookID, widget.chapter);
+    _saveHistory();
+  }
+
+  _saveHistory() async{
+    FavoritesBloc bloc = FavoritesBloc();
+    Favorite hist = await bloc.history();
+    hist.verse.bookID = book.bookID;
+    hist.verse.chapter = widget.chapter;
+    bloc.include(hist);
   }
 
   @override
@@ -57,22 +68,17 @@ class _ChapterPageState extends State<ChapterPage> {
 
   _body() {
     List<dynamic> verses;
-
     return GestureDetector(
       onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
       child: StreamBuilder(
         stream: _bloc.stream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            verses = snapshot.data;
-            return _listView(verses);
-          } else if (snapshot.hasError) {
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
+          if (snapshot.hasError)
             return centerText("Erro lendo a lista de versículos.");
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+
+          return _listView(snapshot.data);
         },
       ),
     );
@@ -90,22 +96,21 @@ class _ChapterPageState extends State<ChapterPage> {
   }
 
   _itemView(context, verses, index) {
-    Bible bible = verses[index] ?? 0;
-    String verseTxt = cleanVerse(bible.verseTxt);
+    Verse bible = verses[index ?? 0];
+    bible.bookName = book.bookName;
 
-    FontWeight weight =
-        (bible.verseTxt == widget.verseText) ? FontWeight.bold : FontWeight.normal;
+    FontWeight weight = (bible.verseTxt == widget.verseText)
+        ? FontWeight.bold
+        : FontWeight.normal;
 
-    return GestureDetector(
-      onTap: () => Scaffold.of(context).hideCurrentSnackBar(),
+    return InkWell(
       onLongPress: () {
-        _onLongPress(context, book.bookName, widget.chapter, bible.verseID,
-            bible.verseTxt);
+        _onLongPress(bible);
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
         child: Text(
-          "${bible.verseID} $verseTxt",
+          "${bible.verseID} ${cleanVerse(bible.verseTxt)}",
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: weight,
@@ -125,11 +130,13 @@ class _ChapterPageState extends State<ChapterPage> {
     widget.chapter = next[1];
     book = widget.books[widget.idxBook];
     _bloc.bookVerses(book.bookID, widget.chapter);
+    PageView.builder(itemBuilder: (context, position) {
+      return Container();
+    });
   }
 
-  _onLongPress(context, bookName, chapter, verseID, String verseTxt) {
-    var ref = "$bookName, $chapter:$verseID";
-    copyToClipboard(context, ref, verseTxt);
+  _onLongPress(verse) {
+    bottomSheetCopyFavorite(context, verse);
   }
 
   @override

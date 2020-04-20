@@ -32,15 +32,14 @@ class _BooksListPageState extends State<BooksListPage> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          ButtonBar(
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.search, color: background),
-                onPressed: () {
-                  push(context, SearchPage(widget.testament));
-                },
-              ),
-            ],
+          IconButton(
+            icon: Icon(Icons.search, color: background),
+            onPressed: () {
+              push(context, SearchPage(widget.testament));
+            },),
+          IconButton(
+            icon: Icon(Icons.home, color: inverse),
+            onPressed: () => goHome(context),
           ),
         ],
         title: Text(title),

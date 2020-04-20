@@ -21,3 +21,10 @@ class BaseBloc<T> {
     _controller.close();
   }
 }
+
+class BoolBloc extends BaseBloc<bool> {
+  @override
+  void add(bool obj) {
+    super.add(obj);
+  }
+}

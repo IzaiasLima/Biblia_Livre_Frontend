@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
         "Lâmpada para os meus pés é a Tua Palavra e luz para o meu caminho.";
     return Container(
       padding: EdgeInsets.only(left: 20, right: 10, bottom: 50),
-      height: 430,
+      height: 470,
       width: double.infinity,
       child: Center(
         child: Text(
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
       color: background,
       child: Container(
         padding: EdgeInsets.all(16),
-        height: 90,
+        height: 70,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -105,10 +105,10 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           color: accent,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.elliptical(90, 100),
-            bottomLeft: Radius.circular(5),
-            bottomRight: Radius.elliptical(90, 100),
-            topRight: Radius.circular(5),
+            topLeft: Radius.elliptical(40, 40),
+            //bottomLeft: Radius.circular(5),
+            bottomRight: Radius.elliptical(30, 30),
+            // topRight: Radius.circular(5),
           ),
         ),
       ),

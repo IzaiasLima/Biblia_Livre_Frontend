@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import 'package:freebible/models/bible.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
-import 'package:freebible/services/bible_bloc.dart';
+import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
@@ -23,16 +23,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = new TextEditingController();
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-
-  BibleBloc _bloc = BibleBloc();
+  VerseBloc _bloc = VerseBloc();
   BooksBloc _booksBloc = BooksBloc();
-  bool _isCopying = false;
   bool _isSearching = false;
 
   @override
   Widget build(BuildContext context) {
-    String title = "Pesquisa no ${widget.testament}";
+    String title = "Pesquisar";
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
@@ -41,8 +38,8 @@ class _SearchPageState extends State<SearchPage> {
         title: Text(title),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.close, color: inverse),
-            onPressed: () => Navigator.pop(context),
+            icon: Icon(Icons.home, color: inverse),
+            onPressed: () => goHome(context),
           )
         ],
       ),
@@ -106,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _showVerses() {
-    List<Bible> verses;
+    List<Verse> verses;
     return StreamBuilder(
         stream: _bloc.stream,
         builder: (context, snapshot) {
@@ -133,7 +130,6 @@ class _SearchPageState extends State<SearchPage> {
   _listView(verses) {
     return Scrollbar(
       child: ListView.builder(
-        key: _listKey,
         itemCount: verses.length,
         itemBuilder: (context, index) {
           return _itemView(context, verses, index);
@@ -143,7 +139,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _itemView(context, verses, index) {
-    Bible bible = verses[index];
+    Verse bible = verses[index];
     String search = _controller.text;
 
     var verse = bible.verseTxt;
@@ -179,16 +175,10 @@ class _SearchPageState extends State<SearchPage> {
         },
       ),
       onLongPress: (() {
-        _isCopying = true;
-        copyToClipboard(context, ref, verse);
+        bottomSheetCopyFavorite(context, bible);
       }),
       onTap: (() {
-        if (_isCopying) {
-          Scaffold.of(context).hideCurrentSnackBar();
-          _isCopying = false;
-        } else {
-          _showChapter(bible.bookID, bible.chapter, bible.verseTxt);
-        }
+        _showChapter(bible.bookID, bible.chapter, bible.verseTxt);
       }),
     );
   }

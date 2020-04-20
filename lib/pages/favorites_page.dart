@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:freebible/models/bible.dart';
+import 'package:freebible/models/favorite.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/services/books_bloc.dart';
@@ -12,28 +13,32 @@ import 'package:freebible/utils/text_utils.dart';
 import 'package:styled_text/styled_text.dart';
 
 class FavoritesPage extends StatefulWidget {
-  FavoritesPage();
+  final FavoriteType favoriteType;
+
+  FavoritesPage(this.favoriteType);
 
   @override
   _FavoritesPageState createState() => new _FavoritesPageState();
 }
 
 class _FavoritesPageState extends State<FavoritesPage> {
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
-
   BooksBloc _booksBloc = BooksBloc();
   FavoritesBloc _favBloc = FavoritesBloc();
-  bool _isCopying = false;
+  bool _isRemovable;
+
+  get type => widget.favoriteType;
 
   @override
   void initState() {
     super.initState();
-    _favBloc.favorites(FavoriteType.MINE);
+    _isRemovable = (type == FavoriteType.MINE);
+    _favBloc.favorites(type.index);
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = "Meus Favoritos";
+    String title = _isRemovable ? "Meus Favoritos" : "Mais conhecidos";
+
     return Scaffold(
       backgroundColor: background,
       appBar: AppBar(
@@ -46,28 +51,27 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   _body() {
-    List<Bible> verses;
     return StreamBuilder(
-        stream: _favBloc.stream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError)
-            return centerText("Erro lendo a lista de favoritos. \n ${snapshot.error}" );
+      stream: _favBloc.stream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
 
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+        if (snapshot.hasError)
+          return centerText("Erro lendo a lista de versículos.");
 
-          verses = snapshot.data;
-          print(verses);
-          return _listView(verses);
-
-        });
+        return RefreshIndicator(
+          child: _listView(snapshot.data),
+          onRefresh: () => _onRefreshIndicator(),
+        );
+      },
+    );
   }
 
   _listView(verses) {
     return Scrollbar(
       child: ListView.builder(
-        key: _listKey,
-        itemCount: verses.length,
+        itemCount: (verses != null) ? verses.length : 0,
         itemBuilder: (context, index) {
           return _itemView(context, verses, index);
         },
@@ -76,16 +80,14 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   _itemView(context, verses, index) {
-    Bible bible = verses[index];
-
-    var ref = "${bible.bookName} ${bible.chapter}:${bible.verseID}";
-    var verse = bible.verseTxt;
+    Favorite favorite = verses[index];
+    Verse verse = favorite.verse;
     var size = fontSize - 2;
 
     return ListTile(
-      contentPadding: EdgeInsets.only(left: 16, right: 12),
+      contentPadding: EdgeInsets.only(top: 6, left: 16, right: 12),
       title: StyledText(
-        text: "<bold>$ref</bold>",
+        text: "<bold>${verse.reference()}</bold>",
         styles: {
           'bold': TextStyle(
             color: Colors.black,
@@ -95,7 +97,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         },
       ),
       subtitle: StyledText(
-        text: "<normal>$verse</normal>",
+        text: "<normal>${cleanVerse(verse.verseTxt)}</normal>",
         styles: {
           'normal': TextStyle(
             color: Colors.black,
@@ -104,27 +106,27 @@ class _FavoritesPageState extends State<FavoritesPage> {
           ),
         },
       ),
-      onLongPress: (() {
-        _isCopying = true;
-        copyToClipboard(context, ref, verse);
-      }),
+      onLongPress: () => _onLongPress(favorite),
       onTap: (() {
-        if (_isCopying) {
-          Scaffold.of(context).hideCurrentSnackBar();
-          _isCopying = false;
-        } else {
-          _showChapter(bible.bookID, bible.chapter, bible.verseTxt);
-        }
+        _showChapter(verse);
       }),
     );
   }
 
-  _showChapter(bookID, chapter, verseTxt) async {
+  _onLongPress(favorite) {
+    bottomSheetCopyRemove(context, _favBloc, favorite, _isRemovable);
+  }
+
+  _onRefreshIndicator() {
+    return _favBloc.favorites(type.index);
+  }
+
+  _showChapter(verse) async {
     try {
-      List<Book> books = await _booksBloc.book(bookID);
+      List<Book> books = await _booksBloc.book(verse.bookID);
       push(
         context,
-        ChapterPage(chapter, 0, books, verseTxt),
+        ChapterPage(verse.chapter, 0, books, verse.verseTxt),
       );
     } catch (e) {
       return centerText("Erro ao exibir o capítulo.");

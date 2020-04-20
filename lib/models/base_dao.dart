@@ -29,7 +29,7 @@ abstract class BaseDAO<T extends Entity> {
 
   Future<T> findById(int id) async {
     List<T> list =
-    await query('select * from $tableName where id = ?', [id]);
+    await query('select * from $tableName where ${tableName}_Id = ?', [id]);
 
     return list.length > 0 ? list.first : null;
   }
@@ -53,14 +53,15 @@ abstract class BaseDAO<T extends Entity> {
     return id;
   }
 
-  Future<int> delete(int id) async {
-    var dbClient = await db;
-    return await dbClient.rawDelete(
-        'delete from $tableName where id = ?', [id]);
-  }
+//  Future<int> delete(int id) async {
+//    var dbClient = await db;
+//    return await dbClient.rawDelete(
+//        'delete from $tableName where ${tableName}_Id = ?', [id]);
+//  }
+//
+//  Future<int> deleteAll() async {
+//    var dbClient = await db;
+//    return await dbClient.rawDelete('delete from $tableName');
+//  }
 
-  Future<int> deleteAll() async {
-    var dbClient = await db;
-    return await dbClient.rawDelete('delete from $tableName');
-  }
 }

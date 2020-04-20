@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
  **/
 
 String cleanVerse(String verse) {
+  if (verse == null) return "";
+
   List<String> listChars = verse.split("");
   List<String> newVerse = [];
   bool isReference = false;
@@ -56,7 +58,7 @@ String textTagged(String text, String term) {
   return text;
 }
 
-centerText(String msg, {color: Colors.redAccent , size: 14.0}) {
+Widget centerText(String msg, {color: Colors.redAccent , size: 14.0}) {
   return Center(
     child: Text(
       msg,
@@ -67,4 +69,23 @@ centerText(String msg, {color: Colors.redAccent , size: 14.0}) {
       ),
     ),
   );
+}
+
+String trunk(String text, length){
+  List<String> ret = [];
+  int max = 0;
+
+  List list = text.split(" ");
+
+  list.forEach((l){
+    int len = l.length;
+    if ((max+len)<length){
+      ret.add("$l ");
+      max += len;
+    }else{
+      max = length;
+    }
+  });
+
+  return "${ret.join("")}...";
 }

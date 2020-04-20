@@ -3,6 +3,7 @@ import 'package:freebible/models/book.dart';
 import 'package:freebible/utils/constants.dart';
 
 class BooksDao extends BaseDAO<Book> {
+  @override
   String get tableName => "BooksList";
 
   @override
