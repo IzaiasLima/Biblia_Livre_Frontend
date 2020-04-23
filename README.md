@@ -4,14 +4,14 @@ Este projeto visa fornecer um aplicativo para celulares (inicialmente para Andro
 
 **Lista de recursos:**
 - interface simplificada
-- acesso off-line, não precisa de internet para usar
+- acesso off-line, sem necessidade de internet para usar
 - aplicativo gratuito, sem exibição de anúcios
 - busca por uma ou mais palavras
-- permite salvar e remover versículos favoritos
-- lista dos 200 versículos mais conhecidos
-- opção de exibiçã dos livros em ordem alfabética
-- exibição do capítulo quando clicado um versículo na busca ou nos favoritos
-- registra o último capítulo acessado, para facilitar a continuidade da última leitura.
+- opção de salvar e remover versículos favoritos
+- lista dos 200 versículos mais conhecidos, na ordem em que aparecem na bíblia
+- exibição dos livros em ordem alfabética (opção extra), além da ordem tradicional do Antigo e do Novo Testamento
+- exibição do capítulo correspondente, clicando no versículo (na busca ou nos favoritos)
+- registro do último capítulo acessado, para facilitar a continuidade da última leitura.
 
 ### Não somos os tradutores
 
