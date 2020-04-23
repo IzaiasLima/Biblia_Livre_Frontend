@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/models/favorite.dart';
-import 'package:freebible/models/verse.dart';
 import 'package:freebible/pages/about_page.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/pages/favorites_page.dart';
@@ -10,7 +9,6 @@ import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/nav.dart';
-import 'package:freebible/utils/text_utils.dart';
 
 class DrawerMenu extends StatelessWidget {
   @override
@@ -30,7 +28,7 @@ class DrawerMenu extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.history),
               title: Text("Histórico"),
-              subtitle: Text("Textos lidos anteriormente"),
+              subtitle: Text("Último capítulo acessado"),
               onTap: () => _onHistoryClick(context),
             ),
             ListTile(
@@ -50,7 +48,7 @@ class DrawerMenu extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.bookmark_border),
-              title: Text("Sobre o texto usado nesta Bíblia"),
+              title: Text("Sobre o texto usado nesta bíblia"),
               subtitle: Text("Mais informações"),
               onTap: () => _onInfoClick(context),
             ),
@@ -86,7 +84,7 @@ class DrawerMenu extends StatelessWidget {
   }
 
   _onHistoryClick(BuildContext context) {
-    //Navigator.pop(context);
+    Navigator.pop(context);
     _showChapter(context);
   }
 

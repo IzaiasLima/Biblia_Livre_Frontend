@@ -35,7 +35,7 @@ class FavoriteDao extends BaseDAO<Favorite> {
         sql, [favorite.type, verse.bookID, verse.chapter, verse.verseID]);
   }
 
-  Future<List<Favorite>> favorites(int type) async {
+  Future<List<Favorite>> favorites(int type, order) async {
     String sql = "SELECT * FROM $booksTable as L "
         "INNER JOIN $tableName as F ON (F.Book = L.Book) "
         "INNER JOIN $bibleTable as B "
@@ -43,7 +43,7 @@ class FavoriteDao extends BaseDAO<Favorite> {
         "AND B.Chapter = F.Chapter "
         "AND B.Verse = F.Verse) "
         "WHERE F.Type=? "
-        "ORDER BY Book, Chapter, Verse;";
+        "ORDER BY $order";
     return await query(sql, [type]);
   }
 }

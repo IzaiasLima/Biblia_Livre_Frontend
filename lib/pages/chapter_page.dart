@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:freebible/models/verse.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/models/favorite.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/utils/constants.dart';

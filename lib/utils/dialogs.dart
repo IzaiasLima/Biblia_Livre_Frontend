@@ -1,61 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freebible/models/verse.dart';
 import 'package:freebible/models/favorite.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/favorites_bloc.dart';
-import 'package:freebible/utils/text_utils.dart';
 
 import 'constants.dart';
 
-bottomSheetCopyRemove(context, FavoritesBloc _bloc, Favorite favorite, isRemovable) {
+bottomSheetCopyRemove(
+    context, FavoritesBloc _bloc, Favorite favorite, isRemovable) {
   Verse verse = favorite.verse;
-  String txt = trunk(verse.verseTxt, 33);
 
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
       return Container(
-        color: background,
-        height: 110,
+        color: accent,
+        height: 50,
         child: Padding(
-          padding:
-              const EdgeInsets.only(left: 16, top: 16, right: 5, bottom: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: <Widget>[
               Row(
                 mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "$txt\n${verse.reference()}",
-                    style: TextStyle(
-                      color: primary,
-                      fontSize: fontSize - 2,
-                    ),
+                  _backButton(context),
+                  Expanded(
+                    flex: 2,
+                    child: Container(),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  FlatButton(
-                    child: Text(
-                      isRemovable ? "REMOVER" : "FAVORITAR",
-                      style: TextStyle(
-                        color: isRemovable ? Colors.redAccent : primary,
-                        fontSize: fontSize - 1,
-                      ),
-                    ),
-                    onPressed: (() {
-                      if (isRemovable)
-                        _bloc.remove(favorite);
-                      else {
-                        favorite.type = FavoriteType.MINE.index;
-                        _bloc.include(favorite);
-                      }
-                      Navigator.pop(context);
-                    }),
-                  ),
+                  _favoriteButton(context, _bloc, favorite, isRemovable),
                   _copyButton(context, verse),
                 ],
               ),
@@ -70,48 +44,30 @@ bottomSheetCopyRemove(context, FavoritesBloc _bloc, Favorite favorite, isRemovab
 bottomSheetCopyFavorite(context, Verse verse) {
   FavoritesBloc _bloc = FavoritesBloc();
   Favorite favorite = Favorite.of(verse);
-  String txt = trunk(verse.verseTxt, 33);
 
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
       return Container(
-        color: background,
-        height: 110,
+        color: primary,
+        height: 50,
         child: Padding(
-          padding:
-              const EdgeInsets.only(left: 16, top: 16, right: 5, bottom: 0),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Text(
-                    "$txt\n${verse.reference()}",
-                    style: TextStyle(
-                      color: primary,
-                      fontSize: fontSize - 2,
-                    ),
-                  ),
-                ],
-              ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(
-                    child: Text(
-                      "FAVORITAR",
-                      style: TextStyle(
-                        color: primary,
-                        fontSize: fontSize - 1,
-                      ),
+                  _backButton(context),
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                      height: 50,
                     ),
-                    onPressed: (() {
-                      _bloc.include(favorite);
-                      Navigator.pop(context);
-                    }),
                   ),
+                  _favoriteButton(context, _bloc, favorite, false),
                   _copyButton(context, verse),
                 ],
               ),
@@ -123,20 +79,63 @@ bottomSheetCopyFavorite(context, Verse verse) {
   );
 }
 
-Widget _copyButton(context, verse) {
-  return FlatButton(
-    child: Text(
-      "COPIAR",
-      style: TextStyle(
-        color: primary,
-        fontSize: fontSize - 1,
+_backButton(context) {
+  return Expanded(
+    child: IconButton(
+        alignment: Alignment.topLeft,
+        icon: Icon(
+          Icons.arrow_back,
+          color: background,
+          size: 30,
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        }),
+  );
+}
+
+_favoriteButton(context, bloc, favorite, isRemovable) {
+  return Expanded(
+    child: isRemovable
+        ? IconButton(
+            tooltip: "Excluir dos favoritos",
+            icon: Icon(
+              Icons.delete_outline,
+              color: background,
+              size: 30,
+            ),
+            onPressed: () {
+              bloc.remove(favorite);
+              Navigator.pop(context);
+            })
+        : IconButton(
+            tooltip: "Favoritar",
+            icon: Icon(
+              Icons.favorite_border,
+              color: background,
+              size: 28,
+            ),
+            onPressed: () {
+              favorite.type = FavoriteType.MINE.index;
+              bloc.include(favorite);
+              Navigator.pop(context);
+            }),
+  );
+}
+
+_copyButton(context, verse) {
+  return Expanded(
+    child: IconButton(
+      tooltip: "Copiar",
+      icon: Icon(
+        Icons.content_copy,
+        color: background,
       ),
+      onPressed: (() {
+        String txt = "${verse.verseTxt}\n${verse.reference()}";
+        Clipboard.setData(ClipboardData(text: txt));
+        Navigator.pop(context);
+      }),
     ),
-    onPressed: (() {
-      String txt = "${verse.verseTxt}\n${verse.reference()}";
-      Clipboard.setData(
-          ClipboardData(text: txt));
-      Navigator.pop(context);
-    }),
   );
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:freebible/models/book.dart';
 import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
-import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/services/favorites_bloc.dart';

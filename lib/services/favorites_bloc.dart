@@ -21,9 +21,10 @@ class FavoritesBloc extends BaseBloc<List<Favorite>> {
     favorites(favorite.type);
   }
 
-  Future<List<Favorite>> favorites(int type) async {
+  Future<List<Favorite>> favorites(int type, {String order}) async {
     try {
-      List<Favorite> favorites = await _dao.favorites(type);
+      order = order?? "Book, Chapter, Verse";
+      List<Favorite> favorites = await _dao.favorites(type, order);
       add(favorites);
       return favorites;
     } catch (e) {
@@ -35,7 +36,7 @@ class FavoritesBloc extends BaseBloc<List<Favorite>> {
   Future<Favorite> history() async {
     try {
       int type = FavoriteType.HISTORY.index;
-      List<Favorite> hist = await favorites(type);
+      List<Favorite> hist = await favorites(type, order: "Favorites_Id");
       return (hist != null) ? hist.last : null;
     } catch (_) {
       return null;

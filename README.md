@@ -2,12 +2,20 @@
 
 Este projeto visa fornecer um aplicativo para celulares (inicialmente para Android) com a tradução da bíblia em português do Brasil, na versão Bíblia Livre. A **Bíblia Livre (BLIVRE)**  é um projeto de tradução das Sagradas Escrituras em linguagem atualizada. Entre as versões modernas da bíblia, esta é a única que conheço que distribui sua versão brasileira sob licença livre, a Licença Creative Commons Atribuição 3.0 Brasil. A página principal do projeto é  [https://sites.google.com/site/biblialivre/](https://sites.google.com/site/biblialivre/). O repositório contendo os arquivos-fonte da tradução pode ser acessado aqui: [https://github.com/blivre/BibliaLivre](https://github.com/blivre/BibliaLivre).
 
+**Lista de recursos:**
+- interface simplificada
+- acesso off-line, não precisa de internet para usar
+- aplicativo gratuito, sem exibição de anúcios
+- busca por uma ou mais palavras
+- permite salvar e remover versículos favoritos
+- lista dos 200 versículos mais conhecidos
+- opção de exibiçã dos livros em ordem alfabética
+- exibição do capítulo quando clicado um versículo na busca ou nos favoritos
+- registra o último capítulo acessado, para facilitar a continuidade da última leitura.
 
 ### Não somos os tradutores
 
 Não somos os resposáveis pelo projeto de tradução da Bíblia Livre, aqui mencionado. Apenas desenvolvemos este frontend para essa versão da Palavra de Deus. Neste aplicativo estamos usando o arquivo fornecido pelo projeto de tradução no formato *mybible* para o aplicativo MySword para celulares. A versão do arquivo usada neste projeto pode estar desatualizada em relação à última versão disponibilizada pelo projeto de tradução.
-
-Na versão 1.04 foi adicionada a opção de pesquisa por palavras, facilitando a busca de versículos. 
 
 Mantivemos a versão baseada no 'Texto Crítico' (revisão 2018.2.0, liberado em 25.02.2018) porém sem exibir as variantes, e com alguns acréscimos vindos do 'Texto Recebido', com vistas a proporcionar maior fluidez na leitura.
 

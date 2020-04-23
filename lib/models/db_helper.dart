@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper.getInstance();
   static final dbName = "database.db";
-  static final isNewCopy = true;
+  static final isNewCopy = false;
 
   DatabaseHelper.getInstance();
 

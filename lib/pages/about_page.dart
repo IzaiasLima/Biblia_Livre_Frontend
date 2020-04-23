@@ -31,7 +31,7 @@ class AboutPage extends StatelessWidget {
           Container(
             child: Image.asset(
               "assets/images/biblia_livre.png",
-              height: 180,
+              height: 100,
             ),
           ),
           Container(
@@ -39,14 +39,14 @@ class AboutPage extends StatelessWidget {
             child: Text(
               "Bíblia Livre",
               style: TextStyle(
-                fontSize: size * 2,
+                fontSize: size * 1.5,
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.only(top: spacer),
             child: Text(
-              "Versão 1.0.5",
+              "Versão 1.0.6",
               style: TextStyle(
                 fontSize: size - 2,
               ),
