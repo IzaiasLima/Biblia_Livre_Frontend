@@ -4,7 +4,7 @@ Este projeto visa fornecer um aplicativo para celulares (inicialmente para Andro
 
 **Lista de recursos:**
 - interface simplificada
-- acesso off-line, sem necessidade de internet para usar
+- uso off-line, sem necessidade de internet
 - aplicativo gratuito, sem exibição de anúcios
 - busca por uma ou mais palavras
 - opção de salvar e remover versículos favoritos
