@@ -30,6 +30,8 @@ class DatabaseHelper {
     // String path = join(databasesPath, dbName);
     String path = (isNewCopy) ? await _alwaysCopy() : await _copyIfNotExists();
 
+    print(path);
+
     var db = await openDatabase(path,
         version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return db;

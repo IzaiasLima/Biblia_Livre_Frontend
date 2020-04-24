@@ -8,7 +8,7 @@ import 'package:freebible/pages/info_page.dart';
 import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/utils/constants.dart';
-import 'package:freebible/utils/nav.dart';
+import 'package:freebible/utils/navigator.dart';
 
 class DrawerMenu extends StatelessWidget {
   @override

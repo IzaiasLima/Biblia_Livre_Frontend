@@ -4,7 +4,7 @@ import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/pages/search_page.dart';
 import 'package:freebible/utils/constants.dart';
-import 'package:freebible/utils/nav.dart';
+import 'package:freebible/utils/navigator.dart';
 
 class ChaptersListPage extends StatelessWidget {
   final idxBook;

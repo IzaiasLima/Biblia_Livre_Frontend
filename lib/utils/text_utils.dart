@@ -58,7 +58,7 @@ String textTagged(String text, String term) {
   return text;
 }
 
-Widget centerText(String msg, {color: Colors.redAccent , size: 14.0}) {
+Widget centerText(String msg, {color: Colors.redAccent, size: 14.0}) {
   return Center(
     child: Text(
       msg,
@@ -71,21 +71,28 @@ Widget centerText(String msg, {color: Colors.redAccent , size: 14.0}) {
   );
 }
 
-String trunk(String text, length){
+String trunk(String text, length) {
   List<String> ret = [];
   int max = 0;
 
   List list = text.split(" ");
 
-  list.forEach((l){
+  list.forEach((l) {
     int len = l.length;
-    if ((max+len)<length){
+    if ((max + len) < length) {
       ret.add("$l ");
       max += len;
-    }else{
+    } else {
       max = length;
     }
   });
 
   return "${ret.join("")}...";
+}
+
+String dotAtEnd(String txt) {
+  String firstChar = txt.substring(0, 1);
+  txt = txt.substring(1, txt.length - 1);
+  txt = "${firstChar.toUpperCase()}$txt.";
+  return cleanVerse(txt);
 }

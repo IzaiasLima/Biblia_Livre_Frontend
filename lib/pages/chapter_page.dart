@@ -6,7 +6,7 @@ import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
-import 'package:freebible/utils/nav.dart';
+import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/text_utils.dart';
 
 class ChapterPage extends StatefulWidget {

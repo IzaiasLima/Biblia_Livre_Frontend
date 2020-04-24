@@ -8,7 +8,7 @@ import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
-import 'package:freebible/utils/nav.dart';
+import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/text_utils.dart';
 import 'package:styled_text/styled_text.dart';
 
@@ -107,9 +107,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         },
       ),
       onLongPress: () => _onLongPress(favorite),
-      onTap: (() {
-        _showChapter(verse);
-      }),
+      onTap: () => showChapter(context, verse),
     );
   }
 
@@ -121,17 +119,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return _favBloc.favorites(type.index);
   }
 
-  _showChapter(verse) async {
-    try {
-      List<Book> books = await _booksBloc.book(verse.bookID);
-      push(
-        context,
-        ChapterPage(verse.chapter, 0, books, verse.verseTxt),
-      );
-    } catch (e) {
-      return centerText("Erro ao exibir o capítulo.");
-    }
-  }
 
   @override
   void dispose() {

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/pages/books_list_page.dart';
 import 'package:freebible/pages/menu_page.dart';
+import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/utils/constants.dart';
-import 'package:freebible/utils/nav.dart';
+import 'package:freebible/utils/navigator.dart';
+import 'package:freebible/utils/text_utils.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -37,26 +40,47 @@ class HomePage extends StatelessWidget {
   }
 
   _banner() {
-    String bannerMsg =
-        "Lâmpada para os meus pés é a Tua Palavra e luz para o meu caminho.";
-    return Container(
-      padding: EdgeInsets.only(left: 20, right: 10, bottom: 50),
-      height: 470,
-      width: double.infinity,
-      child: Center(
-        child: Text(
-          bannerMsg,
-          style: TextStyle(
-              color: accent, fontSize: fontSize, fontStyle: FontStyle.italic),
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.elliptical(98, 100),
-        ),
-      ),
-    );
+    FavoritesBloc bloc  =FavoritesBloc();
+    String bannerMsg;
+
+    return FutureBuilder(
+        future: bloc.randomVerse(),
+        builder: (context, snapshot){
+
+          if(snapshot.hasError)
+            bannerMsg =
+              "Lâmpada para os meus pés é a Tua Palavra e luz para o meu caminho.";
+
+          if(!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
+
+          Verse verse = snapshot.data;
+          bannerMsg = dotAtEnd(verse.verseTxt);
+
+          return InkWell(
+            child: Container(
+              padding: EdgeInsets.only(left: 20, right: 10, bottom: 80),
+              height: 480,
+              width: double.infinity,
+              child: Center(
+                child: Text(
+                  bannerMsg,
+                  style: TextStyle(
+                      color: accent, fontSize: fontSize, fontStyle: FontStyle.italic),
+                ),
+              ),
+              decoration: BoxDecoration(
+                color: background,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.elliptical(98, 100),
+                ),
+              ),
+            ),
+            onTap: () => showChapter(context, verse),
+          );
+
+        },
+      );
   }
 
   _buttonBar(context) {
@@ -105,9 +129,9 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           color: accent,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.elliptical(40, 40),
+            topLeft: Radius.elliptical(30, 30),
             //bottomLeft: Radius.circular(5),
-            bottomRight: Radius.elliptical(30, 30),
+            bottomRight: Radius.elliptical(25, 25),
             // topRight: Radius.circular(5),
           ),
         ),
