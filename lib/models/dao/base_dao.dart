@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:freebible/models/db_helper.dart';
+import 'package:freebible/models/dao/db_helper.dart';
 import 'package:freebible/models/entity.dart';
 import 'package:sqflite/sqflite.dart';
 

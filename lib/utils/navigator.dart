@@ -15,7 +15,7 @@ void goHome(BuildContext context) {
   Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 }
 
-showChapter(context, verse) async {
+goChapter(context, verse) async {
   BooksBloc bloc = BooksBloc();
   try {
     List<Book> books = await bloc.book(verse.bookID);

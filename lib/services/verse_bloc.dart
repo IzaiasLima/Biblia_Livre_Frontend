@@ -1,5 +1,5 @@
 import 'package:freebible/models/verse.dart';
-import 'package:freebible/models/verse_dao.dart';
+import 'package:freebible/models/dao/verse_dao.dart';
 import 'package:freebible/services/base_bloc.dart';
 
 class VerseBloc extends BaseBloc<List<Verse>> {

@@ -1,5 +1,5 @@
 import 'package:freebible/models/book.dart';
-import 'package:freebible/models/books_dao.dart';
+import 'package:freebible/models/dao/books_dao.dart';
 import 'package:freebible/services/base_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 

@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
   }
 
   _banner() {
-    FavoritesBloc bloc  =FavoritesBloc();
+    FavoritesBloc bloc = FavoritesBloc();
     String bannerMsg;
 
     return FutureBuilder(
@@ -76,7 +76,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            onTap: () => showChapter(context, verse),
+            onTap: () => goChapter(context, verse),
           );
 
         },

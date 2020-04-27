@@ -1,4 +1,4 @@
-import 'package:freebible/models/base_dao.dart';
+import 'package:freebible/models/dao/base_dao.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/utils/constants.dart';
 

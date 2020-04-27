@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:freebible/models/favorite.dart';
-import 'package:freebible/models/favorites_dao.dart';
+import 'package:freebible/models/dao/favorites_dao.dart';
 import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/base_bloc.dart';
 import 'package:freebible/utils/constants.dart';
