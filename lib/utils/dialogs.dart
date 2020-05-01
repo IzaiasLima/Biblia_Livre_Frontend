@@ -7,7 +7,7 @@ import 'package:freebible/services/favorites_bloc.dart';
 import 'constants.dart';
 
 bottomSheetCopyRemove(
-    context, FavoritesBloc _bloc, Favorite favorite, isRemovable) {
+    context, FavoritesBloc _bloc, Favorite favorite, [isRemovable=false]) {
   Verse verse = favorite.verse;
 
   showModalBottomSheet<void>(

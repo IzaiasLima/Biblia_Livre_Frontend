@@ -10,6 +10,7 @@ import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/text_utils.dart';
+import 'package:freebible/widgets/custom_widgets.dart';
 import 'package:styled_text/styled_text.dart';
 
 class SearchPage extends StatefulWidget {

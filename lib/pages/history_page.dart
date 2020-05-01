@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:freebible/models/book.dart';
 import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/books_bloc.dart';
@@ -7,36 +8,31 @@ import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
-import 'package:freebible/utils/text_utils.dart';
 import 'package:freebible/widgets/custom_widgets.dart';
 import 'package:styled_text/styled_text.dart';
 
-class FavoritesPage extends StatefulWidget {
-  final FavoriteType favoriteType;
-
-  FavoritesPage(this.favoriteType);
-
+class HistoryPage extends StatefulWidget {
   @override
-  _FavoritesPageState createState() => new _FavoritesPageState();
+  _HistoryPageState createState() => new _HistoryPageState();
 }
 
-class _FavoritesPageState extends State<FavoritesPage> {
+class _HistoryPageState extends State<HistoryPage> {
   BooksBloc _booksBloc = BooksBloc();
   FavoritesBloc _favBloc = FavoritesBloc();
-  bool _isRemovable;
+  Book book;
+  List<int> chaptersList;
 
-  get type => widget.favoriteType;
+  final type = FavoriteType.HISTORY;
 
   @override
   void initState() {
     super.initState();
-    _isRemovable = (type == FavoriteType.MINE);
     _favBloc.favorites(type.index);
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = _isRemovable ? "Meus Favoritos" : "Mais conhecidos";
+    String title = "Histórico";
 
     return Scaffold(
       backgroundColor: background,
@@ -57,7 +53,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
           return Center(child: CircularProgressIndicator());
 
         if (snapshot.hasError)
-          return centerText("Erro lendo a lista de versículos.");
+          return centerText("Erro ao buscar o histórico.");
 
         return RefreshIndicator(
           child: _listView(snapshot.data),
@@ -81,12 +77,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
   _itemView(context, verses, index) {
     Favorite favorite = verses[index];
     Verse verse = favorite.verse;
+
     var size = fontSize - 2;
 
     return ListTile(
       contentPadding: EdgeInsets.only(top: 6, left: 16, right: 12),
       title: StyledText(
-        text: "<bold>${verse.reference()}</bold>",
+        text: "<bold>${verse.bookName}</bold>",
         styles: {
           'bold': TextStyle(
             color: Colors.black,
@@ -96,7 +93,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
         },
       ),
       subtitle: StyledText(
-        text: "<normal>${cleanVerse(verse.verseTxt)}</normal>",
+        text: "<normal>"
+            "1, 2, 3, 4, 5, 6, 7, 8, 9 , 10,"
+            "11, 12, 13, 14, 15, 16, 17, 18, 19 , 20,"
+            "21, 22, 23, 24, 25, 26, 27, 28"
+            "</normal>", // TODO
         styles: {
           'normal': TextStyle(
             color: Colors.black,
@@ -111,13 +112,52 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   _onLongPress(favorite) {
-    bottomSheetCopyRemove(context, _favBloc, favorite, _isRemovable);
+    bottomSheetCopyRemove(context, _favBloc, favorite);
   }
 
   _onRefreshIndicator() {
     return _favBloc.favorites(type.index);
   }
 
+  _historyList() {
+    chaptersList = _getChaptersList(book.chapters);
+    return GridView.builder(
+        itemCount: book.chapters,
+        padding: EdgeInsets.all(16),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+        itemBuilder: (context, index) {
+          return _historyItem(context, index);
+        });
+  }
+
+  _historyItem(context, index) {
+    int chapter =
+        ((book == null) || (chaptersList == null)) ? 0 : chaptersList[index];
+
+    return InkWell(
+      child: Container(
+        padding: EdgeInsets.only(left: 0, right: 16),
+        child: Text(
+          "$chapter",
+          style: TextStyle(fontSize: fontSize),
+          textAlign: TextAlign.end,
+        ),
+      ),
+      onTap: () {
+        //push(context, ChapterPage(chapter, idxBook, books));
+      },
+    );
+  }
+
+  _getChaptersList(int maxChapter) {
+    List<int> list = [];
+
+    for (int chapter = 0; chapter < maxChapter; chapter++) {
+      list.add(chapter + 1);
+    }
+    return list;
+  }
 
   @override
   void dispose() {

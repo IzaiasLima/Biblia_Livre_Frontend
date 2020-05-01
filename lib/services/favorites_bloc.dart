@@ -44,6 +44,7 @@ class FavoritesBloc extends BaseBloc<List<Favorite>> {
 
       var rng = new Random();
       int rndId = rng.nextInt(hist.length);
+
       return hist.elementAt(rndId).verse;
 
     } catch (_) {

@@ -8,6 +8,7 @@ import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/text_utils.dart';
+import 'package:freebible/widgets/custom_widgets.dart';
 
 class ChapterPage extends StatefulWidget {
   List<Book> books;
@@ -67,7 +68,6 @@ class _ChapterPageState extends State<ChapterPage> {
   }
 
   _body() {
-    List<dynamic> verses;
     return GestureDetector(
       onHorizontalDragEnd: (details) => _onHorizontalDrag(details),
       child: StreamBuilder(

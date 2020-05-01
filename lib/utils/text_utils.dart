@@ -1,6 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 /**
  * Devolve o texto passado como parâmetro, retirand os trechos entre [], ou seja,
  * as observações, referências e traduções alteranativas.
@@ -58,19 +55,6 @@ String textTagged(String text, String term) {
   return text;
 }
 
-Widget centerText(String msg, {color: Colors.redAccent, size: 14.0}) {
-  return Center(
-    child: Text(
-      msg,
-      style: TextStyle(
-        color: color,
-        fontSize: size,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  );
-}
-
 String trunk(String text, length) {
   List<String> ret = [];
   int max = 0;
@@ -91,8 +75,13 @@ String trunk(String text, length) {
 }
 
 String dotAtEnd(String txt) {
-  String firstChar = txt.substring(0, 1);
-  txt = txt.substring(1, txt.length - 1);
-  txt = "${firstChar.toUpperCase()}$txt.";
-  return cleanVerse(txt);
+  txt = cleanVerse(txt);
+
+  String firstChar = txt.substring(0, 1).toUpperCase();
+  String lastChar = txt.substring(txt.length - 1);
+
+  if ("?!".contains(lastChar))
+    return "$firstChar${txt.substring(1, txt.length)}";
+
+  return "$firstChar${txt.substring(1, txt.length - 1)}.";
 }

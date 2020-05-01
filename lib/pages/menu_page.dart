@@ -85,6 +85,7 @@ class DrawerMenu extends StatelessWidget {
 
   _onHistoryClick(BuildContext context) {
     Navigator.pop(context);
+    // push(context, HistoryPage());
     _showChapter(context);
   }
 
