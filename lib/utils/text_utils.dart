@@ -3,11 +3,11 @@
  * as observações, referências e traduções alteranativas.
  **/
 
-String cleanVerse(String verse) {
-  if (verse == null) return "";
+String cleanVerse(String verseText) {
+  if (verseText == null) return "";
 
-  List<String> listChars = verse.split("");
-  List<String> newVerse = [];
+  List<String> listChars = verseText.split("");
+  List<String> newText = [];
   bool isReference = false;
 
   listChars.forEach((f) {
@@ -16,12 +16,12 @@ String cleanVerse(String verse) {
     } else if (f == "]") {
       isReference = false;
     } else if (!isReference) {
-      if (newVerse.isEmpty || !(newVerse.last == " " && f == " ")) {
-        newVerse.add(f);
+      if (newText.isEmpty || !(newText.last == " " && f == " ")) {
+        newText.add(f);
       }
     }
   });
-  return newVerse.join("");
+  return newText.join("");
 }
 
 /**

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:freebible/utils/text_utils.dart';
+import 'package:share/share.dart';
+
 import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/favorites_bloc.dart';
 
 import 'constants.dart';
 
-bottomSheetCopyRemove(
-    context, FavoritesBloc _bloc, Favorite favorite, [isRemovable=false]) {
+bottomSheetCopyRemove(context, FavoritesBloc _bloc, Favorite favorite,
+    [isRemovable = false]) {
   Verse verse = favorite.verse;
 
   showModalBottomSheet<void>(
@@ -31,6 +34,7 @@ bottomSheetCopyRemove(
                   ),
                   _favoriteButton(context, _bloc, favorite, isRemovable),
                   _copyButton(context, verse),
+                  _shareButton(context, verse),
                 ],
               ),
             ],
@@ -69,6 +73,7 @@ bottomSheetCopyFavorite(context, Verse verse) {
                   ),
                   _favoriteButton(context, _bloc, favorite, false),
                   _copyButton(context, verse),
+                  _shareButton(context, verse),
                 ],
               ),
             ],
@@ -77,6 +82,28 @@ bottomSheetCopyFavorite(context, Verse verse) {
       );
     },
   );
+}
+
+_shareButton(context, Verse verse) {
+  return Builder(builder: (BuildContext context) {
+    return IconButton(
+      alignment: Alignment.topLeft,
+      icon: Icon(
+        Icons.share,
+        color: background,
+        size: 30,
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        final text = "${cleanVerse(verse.verseTxt)} \n${verse.reference()}";
+        final RenderBox box = context.findRenderObject();
+        Share.share(
+          text,
+          sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+        );
+      },
+    );
+  });
 }
 
 _backButton(context) {
@@ -113,7 +140,7 @@ _favoriteButton(context, bloc, favorite, isRemovable) {
             icon: Icon(
               Icons.favorite_border,
               color: background,
-              size: 28,
+              size: 30,
             ),
             onPressed: () {
               favorite.type = FavoriteType.MINE.index;
@@ -130,9 +157,10 @@ _copyButton(context, verse) {
       icon: Icon(
         Icons.content_copy,
         color: background,
+        size: 28,
       ),
       onPressed: (() {
-        String txt = "${verse.verseTxt}\n${verse.reference()}";
+        final txt = "${cleanVerse(verse.verseTxt)} \n${verse.reference()}";
         Clipboard.setData(ClipboardData(text: txt));
         Navigator.pop(context);
       }),
