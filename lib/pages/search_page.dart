@@ -1,17 +1,18 @@
+import 'dart:ui';
+
+import 'package:easy_rich_text/easy_rich_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-
-import 'package:freebible/models/verse.dart';
 import 'package:freebible/models/book.dart';
+import 'package:freebible/models/verse.dart';
 import 'package:freebible/pages/chapter_page.dart';
-import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/services/books_bloc.dart';
+import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
-import 'package:freebible/utils/text_utils.dart';
+import 'package:freebible/utils/rich_text_widget.dart';
 import 'package:freebible/widgets/custom_widgets.dart';
-import 'package:styled_text/styled_text.dart';
 
 class SearchPage extends StatefulWidget {
   final Testament testament;
@@ -24,6 +25,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _controller = new TextEditingController();
+
   VerseBloc _bloc = VerseBloc();
   BooksBloc _booksBloc = BooksBloc();
   bool _isSearching = false;
@@ -143,38 +145,22 @@ class _SearchPageState extends State<SearchPage> {
     Verse bible = verses[index];
     String search = _controller.text;
 
-    var verse = bible.verseTxt;
-    var ref = "${bible.bookName} ${bible.chapter}:${bible.verseID}";
-    var verseTagged = textTagged(verse, search);
-    var size = fontSize - 2;
+    String verse = bible.verseTxt;
+    String reference = "${bible.bookName} ${bible.chapter}:${bible.verseID}";
+    double size = fontSize - 2;
+    EasyRichText verseTagged = richText(verse, search, size);
 
     return ListTile(
+      //key: ObjectKey(index),
       contentPadding: EdgeInsets.only(left: 16, right: 12),
-      title: StyledText(
-        text: "<bold>$ref</bold>",
-        styles: {
-          'bold': TextStyle(
-            color: Colors.black,
-            fontSize: size,
-            fontWeight: FontWeight.bold,
-          ),
-        },
+      title: Text(
+        reference,
+        style: TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-      subtitle: StyledText(
-        text: "<normal>$verseTagged</normal>",
-        styles: {
-          'normal': TextStyle(
-            color: Colors.black,
-            fontSize: size,
-            fontWeight: FontWeight.normal,
-          ),
-          'bold': TextStyle(
-            color: Colors.blue[700],
-            fontSize: size,
-            fontWeight: FontWeight.bold,
-          ),
-        },
-      ),
+      subtitle: verseTagged,
       onLongPress: (() {
         bottomSheetCopyFavorite(context, bible);
       }),

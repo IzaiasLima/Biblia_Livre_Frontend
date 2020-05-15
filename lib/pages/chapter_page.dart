@@ -38,7 +38,7 @@ class _ChapterPageState extends State<ChapterPage> {
     _saveHistory();
   }
 
-  _saveHistory() async{
+  _saveHistory() async {
     FavoritesBloc bloc = FavoritesBloc();
     Favorite hist = await bloc.history();
     hist.verse.bookID = book.bookID;
