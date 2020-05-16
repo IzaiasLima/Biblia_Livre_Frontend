@@ -36,7 +36,8 @@ class _BooksListPageState extends State<BooksListPage> {
             icon: Icon(Icons.search, color: background),
             onPressed: () {
               push(context, SearchPage(widget.testament));
-            },),
+            },
+          ),
           IconButton(
             icon: Icon(Icons.home, color: inverse),
             onPressed: () => goHome(context),
@@ -64,9 +65,7 @@ class _BooksListPageState extends State<BooksListPage> {
             child: ListView.builder(
               itemExtent: 45,
               itemCount: (books != null) ? books.length : 0,
-              itemBuilder: (context, index) {
-                return _itemView(context, books, index);
-              },
+              itemBuilder: (context, index) => _itemView(context, books, index),
             ),
           );
         });

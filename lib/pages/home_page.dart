@@ -78,7 +78,6 @@ class HomePage extends StatelessWidget {
             ),
             onTap: () => goChapter(context, verse),
           );
-
         },
       );
   }
@@ -130,9 +129,7 @@ class HomePage extends StatelessWidget {
           color: accent,
           borderRadius: BorderRadius.only(
             topLeft: Radius.elliptical(30, 30),
-            //bottomLeft: Radius.circular(5),
             bottomRight: Radius.elliptical(25, 25),
-            // topRight: Radius.circular(5),
           ),
         ),
       ),

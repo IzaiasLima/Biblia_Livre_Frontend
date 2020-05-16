@@ -20,7 +20,6 @@ class ChaptersListPage extends StatefulWidget {
 
 class _ChaptersListPageState extends State<ChaptersListPage> {
   Book book;
-
   List<int> chaptersList;
 
   @override
@@ -72,16 +71,13 @@ class _ChaptersListPageState extends State<ChaptersListPage> {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
 
-          print("Atualizado!!!");
-
           return GridView.builder(
-              itemCount: book.chapters,
-              padding: EdgeInsets.all(16),
-              gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-              itemBuilder: (context, index) {
-                return _itemView(context, index);
-              });
+            itemCount: book.chapters,
+            padding: EdgeInsets.all(16),
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+            itemBuilder: (context, index) => _itemView(context, index),
+          );
         });
   }
 
@@ -108,7 +104,6 @@ class _ChaptersListPageState extends State<ChaptersListPage> {
 
   @override
   void dispose() {
-   //booksBloc.dispose();
     super.dispose();
   }
 }

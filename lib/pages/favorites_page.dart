@@ -7,9 +7,7 @@ import 'package:freebible/services/favorites_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
-import 'package:freebible/utils/text_utils.dart';
 import 'package:freebible/utils/widgets.dart';
-import 'package:styled_text/styled_text.dart';
 
 class FavoritesPage extends StatefulWidget {
   final FavoriteType favoriteType;
@@ -71,9 +69,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return Scrollbar(
       child: ListView.builder(
         itemCount: (verses != null) ? verses.length : 0,
-        itemBuilder: (context, index) {
-          return _itemView(context, verses, index);
-        },
+        itemBuilder: (context, index) =>_itemView(context, verses, index),
       ),
     );
   }
@@ -85,25 +81,20 @@ class _FavoritesPageState extends State<FavoritesPage> {
 
     return ListTile(
       contentPadding: EdgeInsets.only(top: 6, left: 16, right: 12),
-      title: StyledText(
-        text: "<bold>${verse.reference()}</bold>",
-        styles: {
-          'bold': TextStyle(
-            color: Colors.black,
-            fontSize: size,
-            fontWeight: FontWeight.bold,
-          ),
-        },
+      title: Text(
+        verse.reference(),
+        style: TextStyle(
+          fontSize: size,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-      subtitle: StyledText(
-        text: "<normal>${cleanVerse(verse.verseTxt)}</normal>",
-        styles: {
-          'normal': TextStyle(
-            color: Colors.black,
-            fontSize: size,
-            fontWeight: FontWeight.normal,
-          ),
-        },
+      subtitle: Text(
+        verse.verseTxt,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: size,
+          fontWeight: FontWeight.normal,
+        ),
       ),
       onLongPress: () => _onLongPress(favorite),
       onTap: () => goChapter(context, verse),

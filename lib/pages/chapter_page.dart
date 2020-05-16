@@ -90,9 +90,7 @@ class _ChapterPageState extends State<ChapterPage> {
       child: ListView.builder(
         controller: controller,
         itemCount: qtdVerses,
-        itemBuilder: (context, index) {
-          return _itemView(context, verses, index);
-        },
+        itemBuilder: (context, index) =>_itemView(context, verses, index),
       ),
     );
   }
@@ -150,7 +148,7 @@ class _ChapterPageState extends State<ChapterPage> {
         Favorite.marked(bookID: book.bookID, chapter: widget.chapter);
 
     if (controller.position.atEdge) {
-      int secs = qtdVerses * 0;
+      int secs = qtdVerses * 5;
 
       if (controller.position.pixels != 0) {
         endRead = DateTime.now();

@@ -133,27 +133,22 @@ class _SearchPageState extends State<SearchPage> {
     return Scrollbar(
       child: ListView.builder(
         itemCount: verses.length,
-        itemBuilder: (context, index) {
-          return _itemView(context, verses, index);
-        },
+        itemBuilder: (context, index) => _itemView(context, verses, index),
       ),
     );
   }
 
   _itemView(context, verses, index) {
-    Verse bible = verses[index];
+    Verse verse = verses[index];
     String search = _controller.text;
 
-    String verse = bible.verseTxt;
-    String reference = "${bible.bookName} ${bible.chapter}:${bible.verseID}";
     double size = fontSize - 2;
-    EasyRichText verseTagged = richText(verse, search, size);
+    EasyRichText verseTagged = richText(verse.verseTxt, search, size);
 
     return ListTile(
-      //key: ObjectKey(index),
       contentPadding: EdgeInsets.only(left: 16, right: 12),
       title: Text(
-        reference,
+        verse.reference(),
         style: TextStyle(
           fontSize: size,
           fontWeight: FontWeight.bold,
@@ -161,20 +156,20 @@ class _SearchPageState extends State<SearchPage> {
       ),
       subtitle: verseTagged,
       onLongPress: (() {
-        bottomSheetCopyFavorite(context, bible);
+        bottomSheetCopyFavorite(context, verse);
       }),
       onTap: (() {
-        _showChapter(bible.bookID, bible.chapter, bible.verseTxt);
+        _showChapter(verse);
       }),
     );
   }
 
-  _showChapter(bookID, chapter, verseTxt) async {
+  _showChapter(Verse verse) async {
     try {
-      List<Book> books = await _booksBloc.book(bookID);
+      List<Book> books = await _booksBloc.book(verse.bookID);
       push(
         context,
-        ChapterPage(chapter, 0, books, verseTxt),
+        ChapterPage(verse.chapter, 0, books, verse.verseTxt),
       );
     } catch (e) {
       return centerText("Erro ao exibir o capítulo.");
