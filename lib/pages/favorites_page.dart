@@ -8,7 +8,7 @@ import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/text_utils.dart';
-import 'package:freebible/widgets/custom_widgets.dart';
+import 'package:freebible/utils/widgets.dart';
 import 'package:styled_text/styled_text.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -53,11 +53,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return StreamBuilder(
       stream: _favBloc.stream,
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return Center(child: CircularProgressIndicator());
-
         if (snapshot.hasError)
           return centerText("Erro lendo a lista de versículos.");
+
+        if (!snapshot.hasData)
+          return Center(child: CircularProgressIndicator());
 
         return RefreshIndicator(
           child: _listView(snapshot.data),
@@ -117,7 +117,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
   _onRefreshIndicator() {
     return _favBloc.favorites(type.index);
   }
-
 
   @override
   void dispose() {

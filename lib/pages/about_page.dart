@@ -123,11 +123,11 @@ class AboutPage extends StatelessWidget {
           Container(
             padding: EdgeInsets.only(top: spacer),
             child: Text(
-              "Este aplicativo usa a versão do 'Texto Crítico', sem as variantes, "
-              "e com alguns acréscimos vindos do 'Texto Recebido', obtido do projeto "
-              "de tradução de uma versão livre da bíblia para o Portguês do Brasil "
-              "denominado Bíblia Livre (BLIVRE), revisão 2018.2.0, liberado "
-              "em 25.02.2018.",
+              "Este aplicativo usa uma versão baseada no Texto Crítico, sem as variantes, "
+              "com alguns acréscimos oriundos do Texto Recebido. Essa tradução foi fornecida "
+                  "pelo projeto Bíblia Livre (BLIVRE), que provê uma versão livre "
+                  "do texto bíblico em Portguês do Brasil. A versão usada neste aplicativo "
+                  "foi a revisão 2018.2.0, liberada em 25.02.2018.",
               textAlign: TextAlign.justify,
               style: TextStyle(fontSize: (fontSize - 6)),
             ),

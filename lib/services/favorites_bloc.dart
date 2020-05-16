@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/dao/favorites_dao.dart';
+import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/base_bloc.dart';
 import 'package:freebible/utils/constants.dart';
@@ -35,6 +35,11 @@ class FavoritesBloc extends BaseBloc<List<Favorite>> {
     }
   }
 
+  Future<bool> isMarked(Favorite favorite) async {
+    Favorite fav = await _dao.findOne(favorite);
+    return fav != null;
+  }
+
   Future<Verse> randomVerse() async {
     try {
       int type = FavoriteType.OTHERS.index;
@@ -46,7 +51,6 @@ class FavoritesBloc extends BaseBloc<List<Favorite>> {
       int rndId = rng.nextInt(hist.length);
 
       return hist.elementAt(rndId).verse;
-
     } catch (_) {
       return null;
     }

@@ -3,21 +3,35 @@ import 'package:flutter/rendering.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/pages/search_page.dart';
+import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/navigator.dart';
+import 'package:freebible/utils/widgets.dart';
 
-class ChaptersListPage extends StatelessWidget {
+class ChaptersListPage extends StatefulWidget {
   final idxBook;
   final List<Book> books;
-
-  Book book;
-  List<int> chaptersList;
 
   ChaptersListPage(this.books, this.idxBook);
 
   @override
+  _ChaptersListPageState createState() => _ChaptersListPageState();
+}
+
+class _ChaptersListPageState extends State<ChaptersListPage> {
+  Book book;
+  BooksBloc _bloc = BooksBloc();
+  List<int> chaptersList;
+
+  @override
+  void initState() {
+    book = widget.books[widget.idxBook];
+    _bloc.markedChapters(book);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    book = books[idxBook];
     return Scaffold(
       appBar: AppBar(
         title: Text(book.bookName),
@@ -49,42 +63,50 @@ class ChaptersListPage extends StatelessWidget {
   }
 
   _body() {
-    chaptersList = _getChaptersList(book.chapters);
-    return GridView.builder(
-        itemCount: book.chapters,
-        padding: EdgeInsets.all(16),
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
-        itemBuilder: (context, index) {
-          return _itemView(context, index);
+    return StreamBuilder(
+        stream: _bloc.stream, // ,
+        builder: (context, snapshot) {
+          if (snapshot.hasError)
+            return centerText("Erro lendo a lista de capítulos.");
+
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
+
+          return GridView.builder(
+              itemCount: book.chapters,
+              padding: EdgeInsets.all(16),
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
+              itemBuilder: (context, index) {
+                return _itemView(context, index);
+              });
         });
   }
 
   _itemView(context, index) {
-    int chapter =
-        ((book == null) || (chaptersList == null)) ? 0 : chaptersList[index];
+    int chapter = (book == null) ? 0 : book.chaptersList[index];
 
     return InkWell(
       child: Container(
         padding: EdgeInsets.only(left: 0, right: 16),
         child: Text(
           "$chapter",
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            color: book.isMarked(chapter) ? Colors.blueAccent : Colors.black,
+            fontSize: fontSize,
+          ),
           textAlign: TextAlign.end,
         ),
       ),
       onTap: () {
-        push(context, ChapterPage(chapter, idxBook, books));
+        push(context, ChapterPage(chapter, widget.idxBook, widget.books));
       },
     );
   }
 
-  _getChaptersList(int maxChapter) {
-    List<int> list = [];
-
-    for (int chapter = 0; chapter < maxChapter; chapter++) {
-      list.add(chapter + 1);
-    }
-    return list;
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 }

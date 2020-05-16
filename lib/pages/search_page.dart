@@ -11,8 +11,7 @@ import 'package:freebible/services/verse_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
-import 'package:freebible/utils/rich_text_widget.dart';
-import 'package:freebible/widgets/custom_widgets.dart';
+import 'package:freebible/utils/widgets.dart';
 
 class SearchPage extends StatefulWidget {
   final Testament testament;

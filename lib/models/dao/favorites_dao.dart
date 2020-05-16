@@ -1,6 +1,5 @@
 import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
-
 import 'base_dao.dart';
 
 class FavoriteDao extends BaseDAO<Favorite> {
@@ -19,20 +18,25 @@ class FavoriteDao extends BaseDAO<Favorite> {
   void include(Favorite favorite) async {
     try {
       await save(favorite);
-    } catch (_) {
-    }
+    } catch (_) {}
   }
 
   void remove(Favorite favorite) async {
-    delete(favorite);
-  }
-
-  void delete(Favorite favorite) async {
     Verse verse = favorite.verse;
     String sql = "delete from $tableName where "
         "Type=? and Book=? and Chapter=? and Verse=?";
+    await query(
+        sql, [favorite.type, verse.bookID, verse.chapter, verse.verseID]);
+  }
+
+  Future<Favorite> findOne(Favorite favorite) async {
+    Verse verse = favorite.verse;
+    String sql = "select * from $tableName where "
+        "Type=? and Book=? and Chapter=? and Verse=?";
     List<Favorite> list = await query(
         sql, [favorite.type, verse.bookID, verse.chapter, verse.verseID]);
+
+    return list.length > 0 ? list.first : null;
   }
 
   Future<List<Favorite>> favorites(int type, order) async {
@@ -46,4 +50,5 @@ class FavoriteDao extends BaseDAO<Favorite> {
         "ORDER BY $order";
     return await query(sql, [type]);
   }
+
 }

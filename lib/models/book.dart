@@ -12,6 +12,7 @@ class Book extends Entity {
   String bookName;
   int chapters;
   int seq;
+  List<int> markedList =[];
 
   Book({
     this.testament,
@@ -21,6 +22,8 @@ class Book extends Entity {
     this.seq,
   });
 
+  get chaptersList => _chaptersList();
+
   factory Book.fromMap(Map<String, dynamic> json) => Book(
     testament: json["Testament"],
     bookID: json["Book"],
@@ -28,6 +31,16 @@ class Book extends Entity {
     chapters: json["Chapters"],
     seq: json["Seq"],
   );
+
+  _chaptersList() {
+    List<int> list = [];
+    for (int chapter = 0; chapter < this.chapters; chapter++) {
+      list.add(chapter + 1);
+    }
+    return list;
+  }
+
+  bool isMarked(int i) => this.markedList.contains(i);
 
   @override
   Map<String, dynamic> toMap() => {

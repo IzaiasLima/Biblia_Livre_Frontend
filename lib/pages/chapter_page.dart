@@ -8,7 +8,7 @@ import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/dialogs.dart';
 import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/text_utils.dart';
-import 'package:freebible/widgets/custom_widgets.dart';
+import 'package:freebible/utils/widgets.dart';
 
 class ChapterPage extends StatefulWidget {
   List<Book> books;
@@ -25,8 +25,14 @@ class ChapterPage extends StatefulWidget {
 }
 
 class _ChapterPageState extends State<ChapterPage> {
-  Book book;
+  ScrollController controller;
+  DateTime initRead = DateTime.now();
+  DateTime endRead = DateTime.now();
+  int qtdVerses = 0;
+
   VerseBloc _bloc = VerseBloc();
+  FavoritesBloc _favBloc = FavoritesBloc();
+  Book book;
 
   _ChapterPageState();
 
@@ -35,11 +41,27 @@ class _ChapterPageState extends State<ChapterPage> {
     super.initState();
     book = widget.books[widget.idxBook];
     _bloc.bookVerses(book.bookID, widget.chapter);
-    _saveHistory();
+    controller = ScrollController()..addListener(() => _scrollListener());
+    _saveHistory(_favBloc);
   }
 
-  _saveHistory() async {
-    FavoritesBloc bloc = FavoritesBloc();
+  _scrollListener() async {
+    // registra leitura do capítulo
+    Favorite favorite = Favorite.marked(bookID: book.bookID, chapter: widget.chapter);
+    bool marked = await _favBloc.isMarked(favorite);
+    if (controller.position.atEdge) {
+      int secs = qtdVerses * 6;
+
+      if (controller.position.pixels != 0) {
+        endRead = DateTime.now();
+        if (endRead.difference(initRead) > Duration(seconds: secs)) {
+          bottomSheetSaved(context, marked, _favBloc, favorite);
+        }
+      }
+    }
+  }
+
+  _saveHistory(FavoritesBloc bloc) async {
     Favorite hist = await bloc.history();
     hist.verse.bookID = book.bookID;
     hist.verse.chapter = widget.chapter;
@@ -73,10 +95,11 @@ class _ChapterPageState extends State<ChapterPage> {
       child: StreamBuilder(
         stream: _bloc.stream,
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
           if (snapshot.hasError)
             return centerText("Erro lendo a lista de versículos.");
+
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
 
           return _listView(snapshot.data);
         },
@@ -85,9 +108,11 @@ class _ChapterPageState extends State<ChapterPage> {
   }
 
   _listView(verses) {
+    qtdVerses = verses.length;
     return Scrollbar(
       child: ListView.builder(
-        itemCount: verses.length,
+        controller: controller,
+        itemCount: qtdVerses,
         itemBuilder: (context, index) {
           return _itemView(context, verses, index);
         },
@@ -124,6 +149,9 @@ class _ChapterPageState extends State<ChapterPage> {
   _onHorizontalDrag(details) {
     if (details.primaryVelocity == 0) return;
 
+    // reinicia a contagem do tempo de leitura
+    initRead = DateTime.now();
+
     List next = _bloc.nextChapter(
         details, widget.idxBook, widget.chapter, widget.books);
     widget.idxBook = next[0];
@@ -141,7 +169,9 @@ class _ChapterPageState extends State<ChapterPage> {
 
   @override
   void dispose() {
+    controller.dispose();
     _bloc.dispose();
+    _favBloc.dispose();
     super.dispose();
   }
 }

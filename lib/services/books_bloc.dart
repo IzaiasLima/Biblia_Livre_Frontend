@@ -1,5 +1,6 @@
 import 'package:freebible/models/book.dart';
 import 'package:freebible/models/dao/books_dao.dart';
+import 'package:freebible/models/favorite.dart';
 import 'package:freebible/services/base_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 
@@ -28,6 +29,20 @@ class BooksBloc  extends BaseBloc<List<Book>>{
       addError(e);
       return null;
     }
+  }
+
+  Future<Book>markedChapters(Book book) async {
+    List<int> marked = [];
+    List<Book> books = [];
+
+    List<Favorite> favList = await _dao.markedChapters(book);
+    favList.forEach((l) => marked.add(l.verse.chapter));
+    book.markedList = marked;
+
+    books.add(book);
+    add(books);
+
+    return book;
   }
 
   booksTitle(Testament testament) {

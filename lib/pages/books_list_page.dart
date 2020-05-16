@@ -5,7 +5,7 @@ import 'package:freebible/pages/search_page.dart';
 import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/navigator.dart';
-import 'package:freebible/widgets/custom_widgets.dart';
+import 'package:freebible/utils/widgets.dart';
 
 class BooksListPage extends StatefulWidget {
   final Testament testament;

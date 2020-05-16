@@ -1,16 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:freebible/utils/text_utils.dart';
-import 'package:share/share.dart';
-
 import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/favorites_bloc.dart';
+import 'package:freebible/utils/text_utils.dart';
+import 'package:share/share.dart';
 
 import 'constants.dart';
 
-bottomSheetCopyRemove(context, FavoritesBloc _bloc, Favorite favorite,
-    [isRemovable = false]) {
+bottomSheetSaved(context, marked, bloc, favorite) {
+  showModalBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        color: primary,
+        height: 50,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FlatButton(
+                      child: Text(
+                        (marked)
+                            ? "LEITURA JÁ REGISTRADA"
+                            : "REGISTRAR COMO LIDO",
+                        style: TextStyle(color: background),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (marked) return;
+                        bloc.include(favorite);
+                      }),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+bottomSheetCopyRemove(context, bloc, Favorite favorite, [isRemovable = false]) {
   Verse verse = favorite.verse;
 
   showModalBottomSheet<void>(
@@ -32,7 +68,7 @@ bottomSheetCopyRemove(context, FavoritesBloc _bloc, Favorite favorite,
                     flex: 2,
                     child: Container(),
                   ),
-                  _favoriteButton(context, _bloc, favorite, isRemovable),
+                  _favoriteButton(context, bloc, favorite, isRemovable),
                   _copyButton(context, verse),
                   _shareButton(context, verse),
                 ],

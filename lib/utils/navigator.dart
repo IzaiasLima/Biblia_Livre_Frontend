@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/services/books_bloc.dart';
-import 'package:freebible/widgets/custom_widgets.dart';
+import 'package:freebible/utils/widgets.dart';
 
 Future push(BuildContext context, Widget page) {
   return Navigator.push(context,

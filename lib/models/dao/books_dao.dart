@@ -1,10 +1,14 @@
-import 'package:freebible/models/dao/base_dao.dart';
 import 'package:freebible/models/book.dart';
+import 'package:freebible/models/dao/base_dao.dart';
+import 'package:freebible/models/dao/favorites_dao.dart';
+import 'package:freebible/models/favorite.dart';
 import 'package:freebible/utils/constants.dart';
 
 class BooksDao extends BaseDAO<Book> {
   @override
   String get tableName => "BooksList";
+
+  String get favoriteTable => "Favorites";
 
   @override
   Book fromMap(Map<String, dynamic> map) {
@@ -24,5 +28,15 @@ class BooksDao extends BaseDAO<Book> {
       return await query(
           "select * from $tableName where Testament=? order by Book", [t]);
     }
+  }
+
+  Future<List<Favorite>> markedChapters(Book book) async {
+    FavoriteDao dao = FavoriteDao();
+
+    String sql = "select * from $favoriteTable where Type=? and Book=?";
+    List<Favorite> favList =
+    await dao.query(sql, [FavoriteType.MARKED.index, book.bookID]);
+
+    return favList;
   }
 }
