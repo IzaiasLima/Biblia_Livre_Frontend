@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freebible/pages/home_page.dart';
+import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/utils/constants.dart';
+
+final BooksBloc booksBloc = BooksBloc();
 
 void main() => runApp(MyApp());
 

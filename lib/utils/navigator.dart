@@ -15,6 +15,11 @@ void goHome(BuildContext context) {
   Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
 }
 
+
+void goBooks(BuildContext context) {
+  Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+}
+
 goChapter(context, verse) async {
   BooksBloc bloc = BooksBloc();
   try {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:freebible/main.dart';
+import 'package:freebible/models/book.dart';
 import 'package:freebible/models/favorite.dart';
 import 'package:freebible/models/verse.dart';
 import 'package:freebible/services/favorites_bloc.dart';
@@ -8,7 +10,7 @@ import 'package:share/share.dart';
 
 import 'constants.dart';
 
-bottomSheetSaved(context, marked, bloc, favorite) {
+bottomSheetSaved(context, FavoritesBloc bloc, Favorite favorite, Book book) {
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
@@ -25,16 +27,15 @@ bottomSheetSaved(context, marked, bloc, favorite) {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FlatButton(
-                      child: Text(
-                        (marked)
-                            ? "LEITURA JÁ REGISTRADA"
-                            : "REGISTRAR COMO LIDO",
+                      child: Text("REGISTRAR COMO LIDO",
                         style: TextStyle(color: background),
                       ),
                       onPressed: () {
                         Navigator.pop(context);
-                        if (marked) return;
                         bloc.include(favorite);
+
+                        // refresh capítulos lidos
+                        booksBloc.markedChapters(book);
                       }),
                 ],
               ),
@@ -46,7 +47,7 @@ bottomSheetSaved(context, marked, bloc, favorite) {
   );
 }
 
-bottomSheetCopyRemove(context, bloc, Favorite favorite, [isRemovable = false]) {
+bottomSheetCopyRemove(context, FavoritesBloc bloc, Favorite favorite, [isRemovable = false]) {
   Verse verse = favorite.verse;
 
   showModalBottomSheet<void>(
@@ -157,7 +158,7 @@ _backButton(context) {
   );
 }
 
-_favoriteButton(context, bloc, favorite, isRemovable) {
+_favoriteButton(context, FavoritesBloc bloc, Favorite favorite, isRemovable) {
   return Expanded(
     child: isRemovable
         ? IconButton(
@@ -186,7 +187,7 @@ _favoriteButton(context, bloc, favorite, isRemovable) {
   );
 }
 
-_copyButton(context, verse) {
+_copyButton(context, Verse verse) {
   return Expanded(
     child: IconButton(
       tooltip: "Copiar",

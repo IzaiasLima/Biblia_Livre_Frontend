@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:freebible/main.dart';
 import 'package:freebible/models/book.dart';
 import 'package:freebible/pages/chapter_page.dart';
 import 'package:freebible/pages/search_page.dart';
-import 'package:freebible/services/books_bloc.dart';
 import 'package:freebible/utils/constants.dart';
 import 'package:freebible/utils/navigator.dart';
 import 'package:freebible/utils/widgets.dart';
@@ -20,13 +20,13 @@ class ChaptersListPage extends StatefulWidget {
 
 class _ChaptersListPageState extends State<ChaptersListPage> {
   Book book;
-  BooksBloc _bloc = BooksBloc();
+
   List<int> chaptersList;
 
   @override
   void initState() {
     book = widget.books[widget.idxBook];
-    _bloc.markedChapters(book);
+    booksBloc.markedChapters(book);
     super.initState();
   }
 
@@ -64,13 +64,15 @@ class _ChaptersListPageState extends State<ChaptersListPage> {
 
   _body() {
     return StreamBuilder(
-        stream: _bloc.stream, // ,
+        stream: booksBloc.stream, // ,
         builder: (context, snapshot) {
           if (snapshot.hasError)
             return centerText("Erro lendo a lista de capítulos.");
 
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
+
+          print("Atualizado!!!");
 
           return GridView.builder(
               itemCount: book.chapters,
@@ -106,7 +108,7 @@ class _ChaptersListPageState extends State<ChaptersListPage> {
 
   @override
   void dispose() {
-    _bloc.dispose();
+   //booksBloc.dispose();
     super.dispose();
   }
 }

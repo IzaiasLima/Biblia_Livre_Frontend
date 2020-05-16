@@ -45,29 +45,6 @@ class _ChapterPageState extends State<ChapterPage> {
     _saveHistory(_favBloc);
   }
 
-  _scrollListener() async {
-    // registra leitura do capítulo
-    Favorite favorite = Favorite.marked(bookID: book.bookID, chapter: widget.chapter);
-    bool marked = await _favBloc.isMarked(favorite);
-    if (controller.position.atEdge) {
-      int secs = qtdVerses * 6;
-
-      if (controller.position.pixels != 0) {
-        endRead = DateTime.now();
-        if (endRead.difference(initRead) > Duration(seconds: secs)) {
-          bottomSheetSaved(context, marked, _favBloc, favorite);
-        }
-      }
-    }
-  }
-
-  _saveHistory(FavoritesBloc bloc) async {
-    Favorite hist = await bloc.history();
-    hist.verse.bookID = book.bookID;
-    hist.verse.chapter = widget.chapter;
-    bloc.include(hist);
-  }
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Object>(
@@ -149,7 +126,7 @@ class _ChapterPageState extends State<ChapterPage> {
   _onHorizontalDrag(details) {
     if (details.primaryVelocity == 0) return;
 
-    // reinicia a contagem do tempo de leitura
+    // restart tempo de leitura
     initRead = DateTime.now();
 
     List next = _bloc.nextChapter(
@@ -165,6 +142,31 @@ class _ChapterPageState extends State<ChapterPage> {
 
   _onLongPress(verse) {
     bottomSheetCopyFavorite(context, verse);
+  }
+
+  _scrollListener() async {
+    // registra leitura do capítulo
+    Favorite favorite =
+        Favorite.marked(bookID: book.bookID, chapter: widget.chapter);
+
+    if (controller.position.atEdge) {
+      int secs = qtdVerses * 0;
+
+      if (controller.position.pixels != 0) {
+        endRead = DateTime.now();
+        if (endRead.difference(initRead) > Duration(seconds: secs)) {
+          bool marked = await _favBloc.isMarked(favorite);
+          if (!marked) bottomSheetSaved(context, _favBloc, favorite, book);
+        }
+      }
+    }
+  }
+
+  _saveHistory(FavoritesBloc bloc) async {
+    Favorite hist = await bloc.history();
+    hist.verse.bookID = book.bookID;
+    hist.verse.chapter = widget.chapter;
+    bloc.include(hist);
   }
 
   @override
