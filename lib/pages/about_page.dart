@@ -58,7 +58,7 @@ class AboutPage extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(top: spacer),
           child: Text(
-            "Versão 1.1.3",
+            "Versão 1.1.5",
             style: TextStyle(
               fontSize: size - 2,
             ),
