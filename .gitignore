@@ -29,6 +29,7 @@
 .pub-cache/
 .pub/
 /build/
+pubspec.lock
 android/app/release/
 
 
